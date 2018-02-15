@@ -1,0 +1,129 @@
+.table.statistics-campaign-table > thead > tr > th,
+.table.statistics-campaign-table > thead > tr > td,
+.table.statistics-campaign-table > tbody > tr > th,
+.table.statistics-campaign-table > tbody > tr > td,
+.table.statistics-campaign-table > tfoot > tr > th,
+.table.statistics-campaign-table > tfoot > tr > td {
+  padding: 8px 8px;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f0f0f0;
+}
+
+.table.statistics-campaign-table {
+  .name-campaign {
+    margin: 0px;
+    padding: 0px;
+    max-width: 240px;
+    font-weight: 500;
+    &.null {
+      color: #999;
+      font-weight: 300;
+    }
+  }
+}
+
+.clount-sms {
+  float: right;
+  font-weight: 400;
+  margin-right: 15px;
+  font-size: 20px;
+  color: #0ab50a;
+  &.text-danger {
+    color: #ff6161;
+  }
+}
+
+.box-result-import {
+  display: inline-block;
+  padding: 0.5em;
+  color: #0ab50a;
+  font-size: 1.3em;
+  text-align: center;
+  margin-left: 20px;
+}
+
+.box-result-import span {
+  font-weight: 900;
+  line-height: 0.9em;
+}
+
+#listResult .error {
+  color: #ff6161;
+}
+
+.box-itens-campaign {
+  padding: 0 0 1em 0;
+  .ul-box-campaign {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    border: 1px dashed #ccc;
+    border-bottom: 0;
+
+    .each-itens {
+      padding: 1em 1.5em;
+      border-bottom: 1px dashed #ccc;
+      overflow: hidden;
+
+      h4, p {
+        margin: 0;
+        word-break: break-word;
+      }
+    }
+  }
+}
+
+.box-view-email {
+  background: #eee;
+  padding: 15px;
+}
+
+.head-email-view {
+  margin-bottom: 10px;
+  overflow: hidden;
+
+  .fa {
+    width: 40px;
+    height: 40px;
+    border-radius: 99px;
+    background: #dadada;
+    color: #bdbdbd;
+    text-align: center;
+    font-size: 1.7em;
+    padding-top: 0.4em;
+    margin-right: 10px;
+  }
+
+  h5 {
+    margin: 0;
+    font-size: 1.3em;
+  }
+}
+
+.mock-sms {
+  background: url("../../images/sms-mock.png") no-repeat;
+  width: 210px;
+  height: 332px;
+  margin: 0 auto;
+  position: relative;
+  span {
+    display: block;
+    width: 150px;
+    position: absolute;
+    bottom: 70px;
+    left: 30px;
+    background: #F1F1F1;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .title-notification {
+    font-weight: 600;
+  }
+
+  .content-notification {
+    font-size: 1.2rem;
+    font-weight: 300;
+  }
+}

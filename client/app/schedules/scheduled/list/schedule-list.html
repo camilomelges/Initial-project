@@ -1,0 +1,229 @@
+<!--<div class="page page-table" data-ng-controller="CustomerListCtrl">-->
+<div class="page">
+
+  <div class="row ui-section">
+    <div class="col-md-4">
+      <h2 class="section-header">Agendamentos</h2>
+    </div>
+    <div class="col-md-4 col-md-offset-4 text-right">
+      <button ng-click="agendar({id:item.idCustomer._id, idVehicle:item._id})" 
+              permission permission-only="permissions.createSchedule"
+              ng-disabled="ctrl.disableScheduleButton"
+              class="md-raised btn-w-md btn-success md-button md-ink-ripple" tooltip-placement="bottom"
+              uib-tooltip="Novo Agendamento" tooltip-append-to-body="true"
+              analytics-on="click" analytics-event="NovoAgendamento">
+        <span class="ng-scope">Novo Agendamento</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="ui-section">
+    <div class="panel panel-default panel-labeled">
+      <div class="panel-body p-t-20">
+
+        <div class="col-md-12">
+          <div class="col-sm-8 box-tabs">
+            <span class="space"></span>
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+                    ng-class="{'btn-filter-active': ctrl.statusFilter == 'pending'}"
+                    ng-click="filterByStatus('pending')"
+                    tooltip-placement="bottom" uib-tooltip="Ver serviços agendados"
+                    tooltip-append-to-body="true">
+              Agendados
+            </button>
+
+            <span class="space"></span>
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+                    ng-class="{'btn-filter-active': ctrl.statusFilter == 'no-show'}"
+                    ng-click="filterByStatus('no-show')"
+                    tooltip-placement="bottom" uib-tooltip="Ver agendamentos em atraso"
+                    tooltip-append-to-body="true">
+              No Show
+            </button>
+
+            <span class="space"></span>
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+                    ng-class="{'btn-filter-active': ctrl.statusFilter == 'service'}"
+                    ng-click="filterByStatus('service')"
+                    tooltip-placement="bottom" uib-tooltip="Ver agendamentos em serviço"
+                    tooltip-append-to-body="true">
+              Em serviço
+            </button>
+            <span class="space"></span>
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+                    ng-class="{'btn-filter-active': ctrl.statusFilter == 'finished'}"
+                    ng-click="filterByStatus('finished')"
+                    tooltip-placement="bottom" uib-tooltip="Ver agendamentos/serviços finalizados"
+                    tooltip-append-to-body="true">
+              Finalizados
+            </button>
+            <span class="space"></span>
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+                    ng-class="{'btn-filter-active': ctrl.statusFilter == 'canceled'}"
+                    ng-click="filterByStatus('canceled')"
+                    tooltip-placement="bottom" uib-tooltip="Ver agendamentos / serviços cancelados"
+                    tooltip-append-to-body="true">
+              Cancelados
+            </button>
+          </div>
+          <div class="col-sm-4 box-filters">
+            <uib-accordion ng-click="filtros()" close-others="!oneAtATime" class="ui-accordion">
+              <uib-accordion-group heading="Filtros" is-open="status.isFirstOpen1">
+                <div class="col-sm-6 no-padding text-left">
+                  <label>
+                    <input ng-click="pordia()" name="searchType" type="radio" id="required_checkbox" required=""
+                           data-ng-model="ctrl.showDateField" value="true"
+                           class="ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
+                           aria-invalid="true" style="margin-top:-10px;">
+                    &nbsp;&nbsp;Por dia</label>
+                </div>
+
+                <div class="col-sm-6 no-padding text-right">
+                  <label>
+                    <input name="searchType" type="radio" id="required_checkbox" required=""
+                           data-ng-model="ctrl.showDateField" value="false" ng-click="showAllDates()"
+                           class="ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
+                           aria-invalid="true">
+                    &nbsp;&nbsp;Todas as datas</label>
+                </div>
+
+                <div class="col-sm-12 no-padding text-left m-t-10" ng-show="ctrl.showDateField == 'true'">
+                  <div class="form-group">
+                    <label>
+                      <strong>Data</strong>
+                    </label>
+                    <div class="ui-datepicker">
+                      <input type="text"
+                             class="form-control"
+                             uib-datepicker-popup="{{calendar.format}}"
+                             ng-model="calendar.selectedDate"
+                             is-open="calendar.calendarOpen"
+                             min-date="calendar.minDate"
+                             max-date="calendar.maxDate"
+                             datepicker-options="calendar.dateOptions"
+                             date-disabled="calendar.disabled(date, mode)"
+                             ng-required="true"
+                             clear-text='Limpar'
+                             close-text='Fechar'
+                             current-text='Hoje'
+                             show-button-bar="false"
+                             popup-placement="auto top-left"
+                             alt-input-formats="calendar.altInputFormats"
+                             ng-click="calendar.calendarOpen = true"
+                             ng-change="filterByDate()"/>
+                    </div>
+                  </div>
+                </div>
+              </uib-accordion-group>
+              <uib-accordion-group heading="{{group.title}}" ng-repeat="group in groups">
+                {{group.content}}
+            </uib-accordion>
+          </div>
+        </div>
+
+
+        <div class="col-md-12">
+          <table class="table no-margin" ng-show="ctrl.schedules.length">
+            <thead>
+            <tr>
+              <th ng-click="orderByScheduled()">Agendado para 
+                <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByScheduled == false, 'fa fa-caret-down': ctrl.orderByScheduled == true}"></i>
+              </th>
+              <th ng-click="orderByCustomer()">Nome 
+                <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByCustomer == false, 'fa fa-caret-down': ctrl.orderByCustomer == true}"></i>
+              </th>
+              <th ng-click="orderByVehicle()">Veiculo 
+                <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByVehicle == false, 'fa fa-caret-down': ctrl.orderByVehicle == true}"></i>
+              </th>
+              <th ng-click="orderByPlate()" class="hidden-xs hidden-sm">Placa 
+                <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByPlate == false, 'fa fa-caret-down': ctrl.orderByPlate == true}"></i>
+              </th>
+              <th ng-click="orderByOrigin()" class="hidden-xs hidden-sm">Origem 
+                <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByOrigin == false, 'fa fa-caret-down': ctrl.orderByOrigin == true}"></i>
+              </th>
+              <th ng-click="orderByCreateAt()">Criado em 
+                <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByCreateAt == false, 'fa fa-caret-down': ctrl.orderByCreateAt == true}"></i>
+              </th>
+              <th ng-click="orderByFinished()" ng-if="ctrl.statusFilter == 'finished'">Finalizado em 
+                <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByFinished == false, 'fa fa-caret-down': ctrl.orderByFinished == true}"></i>
+              </th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in ctrl.schedules track by item._id | orderBy:['date', 'hour']">
+              <td><span>{{item.date | date:'dd/MM/yyyy'}} {{item.hour}}</span></td>
+              <td>{{item.customer.fullname}} {{item.customer.companyName}}</td>
+              <td class="hidden-xs hidden-sm"><span>{{item.idVehicle.name}}</span></td>
+              <td class="hidden-xs hidden-sm" ng-if="item.idVehicle.plate"><span>{{item.idVehicle.plate}}</span></td>
+              <td class="hidden-xs hidden-sm" ng-if="!item.idVehicle.plate"><span>Não há registro</span></td>
+              <td class="text-center">
+                <span class="label label-info label-origin upper-case">{{item.origin}}</span>
+              </td>
+              <td class="fw-300"><span>{{item.dateCreate | date:'dd/MM/yyyy'}}</span></td>
+              <td ng-if="item.status == 'finished' && item.dateFinished" class="fw-300"><span>{{item.dateFinished | date:'dd/MM/yyyy'}}</span></td>
+              <td ng-if="item.status == 'finished' && !item.dateFinished" class="fw-300"><span>Não há registro</span></td>
+              <td class="p-t-10">
+                <button ng-if="item.status != 'no-show'" 
+                        ng-click="viewSchedule({id: item._id})"
+                        ng-disabled="ctrl.disableViewSchedule"
+                        class="md-raised btn-w-xs md-button md-ink-ripple half-opacity"
+                        tooltip-placement="bottom" uib-tooltip="Visualizar este agendamento"
+                        tooltip-append-to-body="true">
+                  <i class="zmdi zmdi-calendar-alt"></i>
+                </button>
+
+                <button ng-if="item.status == 'no-show'" ui-sref="schedule-edit({idSchedule: item._id, idCustomer: item.customer._id})"
+                        class="md-raised btn-w-xs md-button md-ink-ripple half-opacity"
+                        tooltip-placement="bottom" uib-tooltip="Não compareceu, agendar novamente"
+                        tooltip-append-to-body="true">
+                  <i class="fa fa-refresh"></i>
+                </button>
+
+                <button ng-if="item.status == 'no-show'" ng-click="toService(item, $index)"
+                        class="md-raised btn-w-xs btn-success md-button md-ink-ripple"
+                        tooltip-placement="bottom" uib-tooltip="O cliente chegou"
+                        tooltip-append-to-body="true">
+                  Compareceu
+                </button>
+
+                <button ng-if="item.status != 'no-show' && item.status != 'finished'" 
+                        permission permission-only="permissions.changeScheduleStatus"
+                        ng-disabled="ctrl.disableChangeSchedule"
+                        ng-click="changeSchedule(item._id)" class="md-raised btn-w-xs md-button md-ink-ripple"
+                        tooltip-placement="bottom" uib-tooltip="Alterar o status deste agendamento"
+                        tooltip-append-to-body="true">
+                  <span class="ng-scope">
+                    <span class="fa fa-refresh"></span>
+                  </span>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div ng-hide="ctrl.schedules.length" class="text-center">
+            <p><i>Não há agendamentos com esse status</i></p>
+          </div>
+        </div>
+
+        <div class="row" ng-show="ctrl.schedules.length">
+          <div class="col-md-12 text-center pagination-container">
+
+            <span class="p-l-10 sub-title panel-normal-case">{{ctrl.schedules.length}} - {{ctrl.totalItems}} agendamentos</span>
+
+            <uib-pagination class="pagination-sm"
+                            ng-model="ctrl.currentPage"
+                            total-items="ctrl.totalItems"
+                            max-size="3"
+                            ng-change="paginate()"
+                            items-per-page="ctrl.limit"
+                            rotate="false"
+                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                            boundary-links="true"></uib-pagination>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

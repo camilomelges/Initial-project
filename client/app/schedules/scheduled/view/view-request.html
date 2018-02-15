@@ -1,0 +1,90 @@
+<!--<div class="page page-table" data-ng-controller="PendingCtrl">-->
+<div class="page page-table">
+
+  <div class="row ui-section">
+    <div class="col-md-8 clearfix">
+      <h2 class="section-header">Solicitação de Agendamento</h2>
+    </div>
+
+    <div class="col-md-4">
+      <button class="btn-w-md md-button md-ink-ripple pull-right btn-success"
+              tooltip-placement="bottom" uib-tooltip="Agendar esta solicitação" tooltip-append-to-body="true">
+        <span>Agendar</span>
+      </button>
+      <button class="btn-w-md md-button md-ink-ripple pull-right"
+              tooltip-placement="bottom" uib-tooltip="Editar esta solicitação" tooltip-append-to-body="true">
+        <span class="text-blue">Editar</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="ui-section form-schedule">
+    <div class="panel panel-default panel-labeled">
+      <div class="panel-body p-t-20">
+        <div class="col-md-12">
+          <div class="box-result">
+            <h5>Cliente:</h5>
+            <ul>
+              <li>
+                <span class="fa fa-user"></span> Fulano da Silva <br>
+                <span class="fa fa-phone"></span> (21) 99999-9999 <br> <span class="fa fa-envelope"></span> fulanodasilva@gmail.com <br>
+                <span class="fa fa-home"></span> Rua das Aves floridas, 233 Campo Grande - MS
+              </li>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="box-result">
+            <h5>Veículo:</h5>
+            <ul>
+              <li>
+                <span class="fa fa-car"></span>  PEUGEOT 2008 - 1.6 16V FLEX ALLURE 4P MANUAL - 2016/2016<br>
+                <span class="fa fa-barcode"></span> HSY-1612  <br>
+                <span class="fa fa-tachometer"></span> {{148715 + ' km'}}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="box-result">
+            <h5>Serviço:</h5>
+            <ul>
+              <li>
+                <div ng-show="ctrl.inspection">
+                  Revisão de {{20.000 + ' km'}}
+                </div>
+                {{services.join(", ")}}
+                {{ctrl.observation}}
+                {{ctrl.otherService}}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="box-result">
+            <h5>Data e horario:</h5>
+            <ul>
+              <li>
+                10/04/2017 às 09:30
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 m-b-20">
+    <button class="btn-w-md md-button md-ink-ripple pull-right btn-success"
+            tooltip-placement="bottom" uib-tooltip="Agendar esta solicitação" tooltip-append-to-body="true">
+      <span>Agendar</span>
+    </button>
+    <button class="btn-w-md md-button md-ink-ripple pull-right"
+            tooltip-placement="bottom" uib-tooltip="Editar esta solicitação" tooltip-append-to-body="true">
+      <span class="text-blue">Editar</span>
+    </button>
+
+    <button type="button" ng-click="cancel()" class="btn-w-md md-button md-ink-ripple half-opacity pull-left">Voltar</button>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<!--<div class="page page-table" data-ng-controller="CustomerCreateCtrl">-->
+<!--suppress ALL -->
+<div class="page page-table">
+  <div class="row ui-section">
+    <div class="col-md-6">
+      <h2 class="section-header">{{ctrl.employee.name}} {{ctrl.employee.lastname}}</h2>
+    </div>
+    <div class="col-md-4 col-md-offset-2 text-right">
+      <button permission permission-only="permissions.updateEmployee"
+              ui-sref="employees.edit({id: ctrl.employee._id})" class="btn-w-md md-button md-ink-ripple" tooltip-placement="bottom"
+              uib-tooltip="Editar Funcionário" tooltip-append-to-body="true">
+        <span class="ng-scope text-blue"><i class="zmdi zmdi-edit"></i> Editar funcionário</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <!--START: User info-->
+          <div class="row">
+            <div class="col-md-12">
+              <div layout layout-sm="column" class="layout-sm-column layout-row ui-section m-b-0 font-md">
+
+                <p class="col-xs-12 col-sm-4 form-group">
+                  <strong>Email:</strong><br>
+                  {{ctrl.employee.email || 'Não há registro'}}
+                </p>
+
+                <p class="col-xs-12 col-sm-4 form-group">
+                  <strong>CPF:</strong><br>
+                  {{ctrl.employee.cpf || 'Não há registro'}}
+                </p>
+
+                <p class="col-xs-12 col-sm-4 form-group">
+                  <strong>Telefone:</strong><br>
+                  {{ctrl.employee.phone || 'Não há registro'}}
+                </p>
+
+              </div>
+
+              <div layout layout-sm="column" class="layout-sm-column layout-row ui-section font-md">
+
+                <p class="col-xs-12 col-sm-4 form-group">
+                  <strong>Cargo:</strong><br>
+                  {{ctrl.employee.role}}
+                </p>
+
+                <p class="col-xs-12 col-sm-4 form-group">
+                  <strong>Locação:</strong><br>
+                  <span ng-repeat="branch in ctrl.employee.branches">{{branch.companyName}}</br></span>
+                </p>
+
+              </div>
+
+            </div>
+          </div>
+          <!--END: User info-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 text-left">
+    <button permission permission-only="permissions.deleteEmployee"
+            ng-click="showWarning()" class="btn-w-md md-button md-ink-ripple" tooltip-placement="bottom"
+            uib-tooltip="apagar cadastro permamentemente" tooltip-append-to-body="true">
+      <span class="ng-scope text-red"> Excluir Funcionário</span>
+    </button>
+  </div>
+
+</div>

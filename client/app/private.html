@@ -1,0 +1,26 @@
+<header data-ng-include=" 'app/layout/header.html' "
+        id="header"
+        class="header-container "
+        data-ng-class="{ 'header-fixed': main.fixedHeader,
+                                  'bg-dark': main.skin === '31'}"></header>
+
+<div class="main-container"
+     data-ng-class="{ 'app-nav-horizontal': main.menu === 'horizontal' }">
+  <aside data-ng-include=" 'app/layout/sidebar.html' "
+         id="nav-container"
+         class="nav-container"
+         data-ng-class="{ 'nav-fixed': main.fixedSidebar,
+                                    'nav-horizontal': main.menu === 'horizontal',
+                                    'nav-vertical': main.menu === 'vertical',
+                                    'bg-dark': ['31','32','33','34','35','36'].indexOf(main.skin) < 0
+                   }">
+  </aside>
+
+  <div id="content" class="content-container" style="overflow: visible !important;">
+    <section class="view-container {{pageTransition.class}}" data-ui-view></section>
+  </div>
+</div>
+
+<div class="switch-branches" ng-show="changeBranch.change">
+  <div data-ng-include="'app/layout/loader.html'"></div>
+</div>

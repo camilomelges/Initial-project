@@ -1,0 +1,520 @@
+<!--<div class="page page-table" data-ng-controller="CustomerCreateCtrl">-->
+<div class="page page-table p-t-30">
+  <div class="col-md-4 no-padding">
+    <h2 id="top" class="section-header m-b-20 m-t-20">{{ctrl.titleView}}</h2>
+  </div>
+  <div class="col-xs-12 m-t-20 no-padding">
+    <div class="row">
+      <div class="panel p-30">
+        <div class="row">
+          <!-- Customer -->
+          <div class="col-md-4 m-t-20 p-20 no-marging">
+            <!-- Fullname and company name -->
+            <form>
+              <div class="row m-b-40">
+                <div ng-switch on="customerForm.personType.type">
+                  <div class="form-group col-md-12" ng-switch-when="physical">
+                    <label for="">Nome Completo *</label>
+                    <input type="text" ng-change="checkError('fullname')" class="form-control form-name-customer" data-ng-model="customerForm.fullname">
+                    <div ng-show="ctrl.error.fullname" class="m-t-5">
+                      <div class="invalid-text">Campo requerido</div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-12" ng-switch-when="legal">
+                    <label for="">Razão Social *</label>
+                    <input type="text" ng-change="checkError('companyName')" class="form-control form-name-customer"
+                    data-ng-model="customerForm.companyName">
+                    <div ng-show="ctrl.error.companyName" class="m-t-5">
+                      <div class="invalid-text">Campo requerido</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Phone -->
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="">Telefone *</label>
+                  <input type="text" ng-change="checkError('phone')" class="form-control" data-ng-model="customerForm.phone"
+                  pattern="\([0-9]{2}\) [0-9]{4}-[0-9]{4}|\([0-9]{2}\) [0-9]{5}-[0-9]{4}"
+                  ui-br-phone-number>
+                  <div ng-show="ctrl.error.phone" class="m-t-5">
+                    <div class="invalid-text">Campo requerido</div>
+                  </div>
+                </div>
+              </div>
+              <!-- E-mail -->
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="">E-mail</label>
+                  <input type="text" class="form-control" ng-change="checkError('email')"
+                  data-ng-model="customerForm.email">
+                  <div ng-show="ctrl.error.email" class="m-t-5">
+                    <div class="invalid-text">Deve ser um e-mail válido</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Type person -->
+              <div class="row">
+                <div class="form-group col-md-5 partner-create">
+                  <label for="">Tipo de pessoa:</label>
+                  <select chosen ng-model="customerForm.personType"
+                    ng-change="switchTypePerson(customerForm.personType)"
+                    aria-label="select"
+                    class="full-width"
+                    disable-search="true"
+                    data-placeholder-text-single="' '"
+                    no-results-text="'não foi encontrado'"
+                    data-ng-options="item.person for item in ctrl.personTypes track by item.type">
+                    <option value=""></option>
+                  </select>
+                </div>
+                <div ng-switch on="customerForm.personType.type">
+                  <div class="form-group col-md-7" ng-switch-when="physical">
+                    <label for="">CPF</label>
+                    <input type="text" class="form-control" ui-br-cpf-mask
+                    data-ng-model="customerForm.doc">
+                  </div>
+                  <div class="form-group col-md-7" ng-switch-when="legal">
+                    <label for="">CNPJ</label>
+                    <input type="text" class="form-control" ui-br-cnpj-mask
+                    data-ng-model="customerForm.doc">
+                  </div>
+                </div>
+              </div>
+              <!-- Address -->
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="">Endereço completo</label>
+                  <input type="text" class="form-control"  data-ng-model="customerForm.address" >
+                </div>
+              </div>
+              <!-- State and city -->
+              <div class="row">
+                <div class="form-group col-md-4 partner-create">
+                  <label for="">Estado</label>
+                  <select chosen class="full-width"
+                    data-placeholder-text-single="' '"
+                    no-results-text="'não foi encontrado'"
+                    ng-model="customerForm.state"
+                    ng-change="stateChange()"
+                    data-ng-options="item.name for item in ctrl.states">
+                    <option value=""></option>
+                  </select>
+                </div>
+                <div class="form-group col-md-8 partner-create">
+                  <label for="">Cidade</label>
+                  <select chosen class="full-width""
+                    ng-model="customerForm.city"
+                    data-placeholder-text-single="' '"
+                    no-results-text="'não foi encontrado'"
+                    data-ng-options="item.name for item in ctrl.cities"
+                    aria-label="select" ng-change="cityChange(ctrl.city)">
+                    <option value=""></option>
+                  </select>
+                </div>
+              </div>
+              <!-- Birth date -->
+              <div class="row">
+                <div ng-switch on="customerForm.personType.type">
+                  <div class="form-group col-md-12">
+                    <label ng-switch-when="physical" for="">Data de aniversário</label>
+                    <label ng-switch-when="legal" for="">Data de criação</label>
+                    <div class="ui-datepicker box-result">
+                      <input type="text"
+                      class="form-control"
+                      uib-datepicker-popup="{{calendar.format}}"
+                      ng-model="customerForm.birthDate"
+                      is-open="calendar.calendarOpen"
+                      datepicker-options="calendar.dateOptions"
+                      clear-text='Limpar'
+                      close-text='Fechar'
+                      current-text='Hoje'
+                      show-button-bar="false"
+                      popup-placement="auto bottom-left"
+                      ng-keyup="calendar.calendarOpen = true"
+                      alt-input-formats="calendar.altInputFormats"
+                      ng-click="calendar.calendarOpen = true"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Buttom Save -->
+              <div class="row">
+                <div class="col-ms-12 m-t-20 m-b-20 text-center">
+                  <button type="button" ng-click="submitForm()" ng-disabled="ctrl.disableSaveButton"  class="md-raised btn-w-md btn-primary md-button md-ink-ripple">Salvar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- Vehicles -->
+          <div class="col-md-8 p-20 no-marging">
+            <div class="col-md-10 col-md-offset-1" style="padding: 20px;" ng-class="{'box-new': ctrl.btnAddVehicle || vehiclesList.length > 0}" ng-if="!(ctrl.isEdit)">
+              <!-- Selectec Vehicle -->
+              <div ng-if="!ctrl.btnAddVehicle" style="text-align: left;">
+                <!--Title-->
+                <!--Menu-->
+                <div class="no-padding">
+                  <h2 style="text-align: start; font-size: 15px; font-weight: 400; padding: 0; margin: 0"
+                  class="section-header gray-text col-md-6">Veículos do usuário.</h2>
+                  <div class="col-md-6 box-search">
+                    <button type="button" ng-click="showVehicleForm()" ng-if="!ctrl.btnAddVehicle" class="md-raised btn-w-xs btn-primary md-button md-ink-ripple text-white">Novo carro</button>
+                  </div>
+                </div>
+                <div class="p-b-10">
+                  <div ng-hide="vehiclesList.length > 0" class="col-md-12 no-padding m-b-20 gray-text"
+                    style="text-align: start;">
+                    <label style="margin: 0;">Adicione um veículo para visualiza-lo.</label>
+                  </div>
+                  <div ng-if="vehiclesList" class="col-md-12 no-padding">
+                    <ul style="list-style: none; padding-left: 0px;">
+                      <li style="margin: 0;
+                        margin-right: 10px;
+                        display: inline-block;
+                        line-height: 35px"
+                        ng-class="{
+                        'vehicle-selected': (ctrl.selectedVehicle === item),
+                        'vehicle-not-selected': !(ctrl.selectedVehicle === item)
+                        }"
+                        class="row" ng-repeat="item in vehiclesList track by $index">
+                        <div ng-if="vehiclesList" style="padding: 0px;"
+                          ng-click="choiseVehicle(item)"
+                          class="col-md-12">
+                          <p class="no-marging"> {{item.name}} - {{item.model}}</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!--Vehicle information-->
+                <div ng-if="ctrl.selectedVehicle" class="col-md-12 p-t-20 p-b-20">
+                  <div class="col-md-12 no-padding">
+                    <div class="col-md-12" style="text-align: center">
+                      <p>
+                        <span>
+                          <b class="dark-gray-text">{{ctrl.selectedVehicle.name}}</b>
+                        </span>
+                        <span class="light-gray-text" style="font-size: 11px;">
+                          {{ctrl.selectedVehicle.year}} / {{ctrl.selectedVehicle.model}}
+                        </span>
+                      </p>
+                    </div>
+                    <div class="col-md-12" style="text-align: center">
+                      <p class="light-gray-text">
+                        {{ctrl.selectedVehicle.specification}}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!--Vehicle image-->
+                <div ng-if="ctrl.selectedVehicle" class="col-md-12 p-b-20">
+                  <div class="col-md-12 no-padding">
+                    <div class="col-md-offset-2 col-md-8" style="text-align: center">
+                      <img style="max-width: 100%; max-height: 100%;" ng-src="{{ctrl.vehicleImageUri}}">
+                    </div>
+                  </div>
+                </div>
+                <!--Vehicle plate and purchase date-->
+                <div ng-if="ctrl.selectedVehicle" class="col-md-12 p-t-20 p-b-20 border-box-radius no-padding">
+                  <div class="col-md-9"
+                    style="text-align: start; padding-top: 5px;">
+                    <p class="light-gray-text" ng-show="ctrl.selectedVehicle.purchaseDate" style="margin:0;">
+                      Data de compra: {{ctrl.selectedVehicle.purchaseDate | date:'dd/MM/yyyy'}}
+                    </p>
+                    <p class="light-gray-text" ng-hide="ctrl.selectedVehicle.purchaseDate" style="margin:0;">
+                      Data de compra: Não há registro
+                    </p>
+                  </div>
+                  <div class="col-md-3 border-box-radius" style="
+                    text-align: center;
+                    margin-left: -10px;">
+                    <p class="light-gray-text" style="margin-top: 5px; margin-bottom: 5px;">
+                      {{ctrl.selectedVehicle.plate || 'XXX-XXXX'}}
+                    </p>
+                  </div>
+                </div>
+                <!--KM and Last Inspection-->
+                <div ng-if="ctrl.selectedVehicle" class="col-md-12 p-b-20 p-t-20">
+                  <div class="col-md-6 no-padding">
+                    <div class="col-md-12 no-padding">
+                      <div class="col-md-4 no-padding">
+                        <label class="light-gray-text" style="
+                          font-weight: 400;
+                          font-size: 12px;"> Km atual
+                        </label>
+                      </div>
+                    </div>
+                    <div ng-if="ctrl.selectedVehicle.km" class="col-md-12 no-padding dark-gray-text"
+                      style="margin-left: 3px; font-weight: 900; font-size: 16px;">
+                      <p>{{ctrl.selectedVehicle.km}} Km</p>
+                    </div>
+                    <div ng-if="!ctrl.selectedVehicle.km" class="col-md-12 no-padding dark-gray-text"
+                      style="margin-left: 3px; font-weight: 900; font-size: 16px;">
+                      <p>Não há registro</p>
+                    </div>
+                    <div ng-if="ctrl.selectedVehicle.lastKmUpdate && ctrl.selectedVehicle.km" class="col-md-12 no-padding" style="margin-left: 3px">
+                      <label class="light-gray-text" style="
+                        margin-left: 0;
+                        font-weight: 400;
+                        font-size: 12px;"> Última atualização: {{ctrl.selectedVehicle.lastKmUpdate | date:'dd/MM/yyyy'}}
+                      </label>
+                    </div>
+                    <div ng-if="!ctrl.selectedVehicle.km" class="col-md-12 no-padding" style="margin-left: 3px">
+                      <label class="light-gray-text" style="
+                        margin-left: 0;
+                        font-weight: 400;
+                        font-size: 12px;"> Última atualização: Não há registro
+                      </label>
+                    </div>
+                    <div class="col-md-12 no-padding m-t-20">
+                      <button type="button"
+                      class="btn-w-xs md-button md-ink-ripple half-opacity pull-left"
+                      tooltip-placement="bottom"
+                      tooltip-append-to-body="true"
+                      ng-click="editVehicle()">
+                      <span class="ng-scope text-blue">Editar Carro</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-6 no-padding">
+                    <div class="col-md-12 no-padding">
+                      <div class="col-md-5 no-padding">
+                        <label class="light-gray-text" style="
+                          font-weight: 400;
+                        font-size: 12px;">Ultima revisão</label>
+                      </div>
+                    </div>
+                    <div ng-if="ctrl.selectedVehicle.inspection.km" class="col-md-12 no-padding dark-gray-text"
+                      style="margin-left: 3px; font-weight: 900; font-size: 16px;">
+                      <p>{{ctrl.selectedVehicle.inspection.km}} Km</p>
+                    </div>
+                    <div ng-if="!ctrl.selectedVehicle.inspection.km" class="col-md-12 no-padding dark-gray-text"
+                      style="margin-left: 3px; font-weight: 900; font-size: 16px;">
+                      <p>Não há registro</p>
+                    </div>
+                    <div ng-if="ctrl.selectedVehicle.inspection.date" class="col-md-12 no-padding"
+                      style="margin-left: 3px">
+                      <label class="light-gray-text" style="
+                        margin-left: 0;
+                        font-weight: 400;
+                        font-size: 12px;"> Data da última revisão: {{ctrl.selectedVehicle.inspection.date |
+                        date:'dd/MM/yyyy'}}
+                      </label>
+                    </div>
+                    <div ng-if="!ctrl.selectedVehicle.inspection.date" class="col-md-12 no-padding"
+                      style="margin-left: 3px">
+                      <label class="light-gray-text" style="
+                        margin-left: 0;
+                        font-weight: 400;
+                        font-size: 12px;"> Data da última revisão: Não há registro
+                      </label>
+                    </div>
+                    <div class="col-sm-12 no-padding m-t-20">
+                      <button type="button"
+                      class="btn-w-xs md-button md-ink-ripple half-opacity pull-left"
+                      tooltip-placement="bottom"
+                      tooltip-append-to-body="true"
+                      ng-click="dropVehicleFromList()">
+                      <span class="ng-scope gray-text">Excluir</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- New Vehicle -->
+              <div ng-if="ctrl.btnAddVehicle" style="text-align: left;">
+                <form name="vehicle_form" ng-submit="saveVehicleToList(vehicle_form)" novalidate>
+                  <!-- Brand and cancel button -->
+                  <div class="col-md-12 m-t-40">
+                    <div class="form-group col-md-3 no-marging partner-create" style="padding-right: 0">
+                      <label for="">Marca*</label>
+                      <select chosen ng-model="ctrl.brand" aria-label="select"
+                        required
+                        name="brand"
+                        data-ng-options="item.name for item in ctrl.brands"
+                        class="full-width"
+                        data-placeholder-text-single="'Selecione'"
+                        no-results-text="'Esta marca não existe'"
+                        ng-change="brandChange(ctrl.brand)">
+                        <option value=""></option>
+                      </select>
+                      <div class="m-t-5" ng-messages="vehicle_form.brand.$error" multiple
+                        ng-if="vehicle_form.$submitted && vehicle_form.brand.$error">
+                        <div ng-message="required" class="invalid-text">Campo requerido</div>
+                      </div>
+                    </div>
+                    <div class="col-md-9" style="text-align: right; margin-top: 15px;">
+                      <button type="button" ng-click="cancelVehicleForm()" ng-if="ctrl.btnAddVehicle" class="btn-w-md md-button md-ink-ripple text-blue" style="border: none !important;">Cancelar</button>
+                    </div>
+                  </div>
+                  <!-- Model, year and yearModel -->
+                  <div class="col-md-12 m-t-20">
+                    <div class="form-group col-md-3 no-marging partner-create" style="padding-right: 0">
+                      <label for="">Modelo*</label>
+                      <select chosen ng-model="ctrl.model" aria-label="select" class="full-width"
+                        required
+                        name="model"
+                        data-placeholder-text-single="'Selecione'"
+                        no-results-text="'Este modelo não existe'"
+                        data-ng-options="item.name for item in ctrl.models"
+                        ng-change="modelChange(ctrl.model)">
+                        <option value=""></option>
+                      </select>
+                      <div class="m-t-5" ng-messages="vehicle_form.model.$error" multiple
+                        ng-if="vehicle_form.$submitted && vehicle_form.model.$error">
+                        <div ng-message="required" class="invalid-text">Campo requerido</div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-5 no-marging partner-create">
+                      <label for="">Ano de Fabricação*</label>
+                      <select chosen ng-model="ctrl.yearFab" aria-label="select"
+                        class="full-width"
+                        required
+                        name="year"
+                        data-placeholder-text-single="'Selecione'"
+                        no-results-text="'Este ano não existe'"
+                        disable-search="true"
+                        data-ng-options="item for item in ctrl.yearsFab"
+                        ng-change="yearFabChange(ctrl.yearFab)">
+                        <option value=""></option>
+                      </select>
+                      <div class="m-t-5" ng-messages="vehicle_form.year.$error" multiple
+                        ng-if="vehicle_form.$submitted && vehicle_form.year.$error">
+                        <div ng-message="required" class="invalid-text">Campo requerido</div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4 no-marging partner-create" style="padding-left: 0">
+                      <label for="">Ano do Modelo*</label>
+                      <select chosen ng-model="ctrl.yearModel" aria-label="select"
+                        class="full-width"
+                        required
+                        name="yearModel"
+                        data-ng-options="item for item in ctrl.yearsModel"
+                        disable-search="true"
+                        data-placeholder-text-single="'Selecione'"
+                        no-results-text="'Este ano não existe'"
+                        ng-change="yearModelChange(ctrl.yearModel)">
+                        <option value=""></option>
+                      </select>
+                      <div class="m-t-5" ng-messages="vehicle_form.yearModel.$error" multiple
+                        ng-if="vehicle_form.$submitted && vehicle_form.yearModel.$error">
+                        <div ng-message="required" class="invalid-text">Campo requerido</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Specification -->
+                  <div class="col-md-12 m-t-20">
+                    <div class="form-group col-md-12 no-marging partner-create">
+                      <label for="">Especificação*</label>
+                      <select chosen ng-model="ctrl.specification" aria-label="select"
+                        class="full-width"
+                        required
+                        name="specification"
+                        data-placeholder-text-single="'Selecione a especificação'"
+                        no-results-text="'Esta especificação não existe'"
+                        data-ng-options="item.name for item in ctrl.specifications"
+                        ng-change="specificationChange(ctrl.specification)">
+                        <option value=""></option>
+                      </select>
+                      <div class="m-t-5" ng-messages="vehicle_form.specification.$error" multiple
+                        ng-if="vehicle_form.$submitted && vehicle_form.specification.$error">
+                        <div ng-message="required" class="invalid-text">Campo requerido</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12 m-t-10">
+                    <div class="col-md-12 no-marging">
+                      <hr>
+                    </div>
+                  </div>
+                  <!-- purchaseDate and plate -->
+                  <div class="col-md-12 m-t-20">
+                    <div class="form-group col-md-6 no-marging">
+                      <label>Data da compra</label>
+                      <div class="ui-datepicker box-result">
+                        <input type="text"
+                        class="form-control"
+                        name="purchase_date"
+                        ng-change="dateChanged()"
+                        uib-datepicker-popup="{{calendar.format}}"
+                        data-ng-model="vehicleForm.purchaseDate"
+                        is-open="calendar.calendarOpen1"
+                        datepicker-options="calendar.dateOptions"
+                        clear-text='Limpar'
+                        close-text='Fechar'
+                        current-text='Hoje'
+                        show-button-bar="false"
+                        popup-placement="auto bottom-left"
+                        ng-keyup="calendar.calendarOpen1 = true"
+                        alt-input-formats="calendar.altInputFormats"
+                        ng-click="calendar.calendarOpen1 = true"/>
+                        <div style="padding: 0;" class="m-t-5" ng-messages="vehicle_form.purchase_date.$error"
+                          ng-if='vehicle_form.$submitted && vehicle_form.purchase_date.$error'>
+                          <div ng-message="dateGraterThenToday" class="invalid-text">A data não pode ser maior que hoje</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 no-marging">
+                      <div class="form-group">
+                        <label for="">Placa</label>
+                        <input type="text" class="form-control" ui-br-car-plate-mask name="plate"
+                        data-ng-model="vehicleForm.plate">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12 m-t-5">
+                    <div class="col-md-12 no-marging">
+                      <hr>
+                    </div>
+                  </div>
+                  <!-- Km, inspection km and inspection date -->
+                  <div class="col-md-12 m-t-20">
+                    <div class="form-group col-md-3">
+                      <label for="">KM atual</label>
+                      <input type="text" class="form-control" ui-number-mask="0" min="0" name="km" data-ng-model="vehicleForm.km">
+                    </div>
+                    <div class="form-group col-md-5">
+                      <label>Última revisão</label>
+                      <small class="light-gray-text">em km</small>
+                      <input type="text" ui-number-mask="0" min="0" class="form-control"
+                      data-ng-model="vehicleForm.inspection.km">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label>Data da revisão</label>
+                      <div class="ui-datepicker box-result">
+                        <input type="text"
+                        ng-change="dateChanged()"
+                        class="form-control"
+                        name="inspection_date"
+                        uib-datepicker-popup="{{calendar.format}}"
+                        data-ng-model="vehicleForm.inspection.date"
+                        is-open="calendar.calendarOpen2"
+                        datepicker-options="calendar.dateOptions"
+                        clear-text='Limpar'
+                        close-text='Fechar'
+                        current-text='Hoje'
+                        show-button-bar="false"
+                        ng-keyup="calendar.calendarOpen2 = true"
+                        popup-placement="auto bottom-left"
+                        alt-input-formats="calendar.altInputFormats"
+                        ng-click="calendar.calendarOpen2 = true"/>
+                        <div style="padding: 0;" class="m-t-10" ng-messages="vehicle_form.inspection_date.$error"
+                          ng-if='vehicle_form.$submitted && vehicle_form.inspection_date.$error'>
+                          <div ng-message="dateGraterThenToday" class="invalid-text">A data não pode ser maior que hoje</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Save buttom -->
+                  <div class="col-md-12 align-center no-padding">
+                    <button type="submit" ng-if="ctrl.btnAddVehicle" ng-disabled="ctrl.disableSaveButton" class="md-raised btn-w-md btn-primary md-button md-ink-ripple m-20 m-b-20 text-white" style="border: none !important;">Salvar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

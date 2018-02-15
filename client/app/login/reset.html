@@ -1,0 +1,80 @@
+<header class="top-header clearfix bg-transparent">
+  <div ui-preloader></div>
+</header>
+<div class="page-signin">
+
+  <div class="wrapper">
+    <div class="main-body">
+      <div class="body-inner">
+        <div class="card bg-white">
+
+          <form name="form_constraints" class="form-horizontal" data-ng-submit="resetPassword(form_constraints.$valid)"
+                novalidate>
+            <div class="card-content">
+
+              <section class="logo text-center">
+
+                <h1><a href="#/"><img src="images/logo-simple.png"/></a></h1>
+              </section>
+
+
+              <fieldset>
+
+                <h2>Alteração de senha</h2>
+                <p class="lead">Por favor, insira sua nova senha nos campos abaixo</p>
+
+
+                <div ng-if="ctrl.error" class="alert alert-danger alert-dismissible" role="alert">
+                  <strong>Erro!</strong> <%= errorMsg %>.
+                </div>
+
+
+
+                  <span>A senha deve conter entre 6 e 12 dígitos</span>
+
+                  <div class="form-group p-t-20">
+                    <label>Nova senha</label>
+                    <input type="password" required name="password" data-ng-model="ctrl.password" class="form-control">
+                    <span class="input-bar"></span>
+                    <div ng-messages="form_constraints.password.$error" multiple
+                         ng-if='form_constraints.$submitted && form_constraints.password.$error'>
+                      <div ng-message="required" class="invalid-text">Campo requerido.</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group p-t-20">
+                    <label>Confirmar nova senha</label>
+                    <input type="password" required name="verification" data-ng-model="ctrl.verification" class="form-control">
+                    <span class="input-bar"></span>
+                    <div ng-messages="form_constraints.verification.$error" multiple
+                         ng-if='form_constraints.$submitted && form_constraints.verification.$error'>
+                      <div ng-message="required" class="invalid-text">Campo requerido.</div>
+                    </div>
+                  </div>
+
+
+
+
+              </fieldset>
+
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card-action no-border text-left">
+                  <button class="btn btn-lg btn-primary btn-block" type="submit">Alterar senha</button>
+                </div>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+

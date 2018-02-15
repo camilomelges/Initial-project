@@ -1,0 +1,58 @@
+<div class="page page-table">
+  <div class="row ui-section">
+    <div class="col-md-6">
+      <h2 class="section-header">Resultado da análise</h2>
+    </div>
+
+    <div class="col-md-4 col-md-offset-2 text-right">
+      <button permission permission-only="permissions.requestAnalysis"
+              class="md-raised btn-w-md btn-success md-button md-ink-ripple" tooltip-placement="bottom"
+              uib-tooltip="Disparar SMS e Email" tooltip-append-to-body="true" ng-click="openModal('md')"
+              data-ng-disabled="!ctrl.matchesList.length" disabled="disabled">
+        <span class="ng-scope">Anunciar</span>
+      </button>
+    </div>
+  </div>
+
+  <ui-view>
+  </ui-view>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div ng-show="ctrl.matchesList.length">
+
+        <table class="table no-margin">
+          <thead>
+          <tr>
+            <th class="hidden-xs">Cliente</th>
+            <th class="hidden-xs">Veículo</th>
+            <th class="hidden-xs">Kilometragem Estimada</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="item in" ng-repeat="item in ctrl.matchesList">
+            <td>
+              <p>
+                <span class="fa fa-user"></span>
+                {{item.name}}
+              </p>
+              <p ng-if="item.phones" ng-repeat="phone in item.phones track by $index">
+                <span class="fa fa-phone"></span>
+                {{phone ? phone : ' Não preenchido '}}
+              </p>
+              <p>
+                <span class="fa fa-envelope-o"></span>
+                {{item.email ? item.email : ' Não preenchido '}}
+              </p>
+            </td>
+            <td class="hidden-xs">{{item.brand}}/{{item.model}}</td>
+            <td class="hidden-xs">{{item.km}} km</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-show="!ctrl.matchesList.length" class="text-center ui-section">
+        <p><i>Não houve nenhum Match entre Cliente x Serviço</i></p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,132 @@
+<!--<div class="page page-table" data-ng-controller="CustomerCreateCtrl">-->
+<!--suppress ALL -->
+<div class="page page-table">
+  <div class="row ui-section">
+    <div class="col-md-6">
+      <h2 class="section-header">{{customer.fullname}}</h2>
+    </div>
+    <div class="col-md-4 col-md-offset-2 text-right">
+      <button ng-click="close()" class="btn-w-md md-button md-ink-ripple" tooltip-placement="bottom"
+              uib-tooltip="Voltar para tela de chat" tooltip-append-to-body="true">
+        <span class="ng-scope text-blue"><i class="zmdi zmdi-close"></i> Fechar</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form name="form_constraints">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <!--START: User info-->
+            <div class="row">
+              <div class="col-md-12">
+                <div layout layout-sm="column" class="layout-sm-column layout-row ui-section m-b-0 font-md">
+
+                  <p class="col-xs-12 col-sm-4 form-group">
+                    <strong>Tipo de Pessoa:</strong><br>
+                    {{customer.typePerson || 'Não há registro'}}
+                  </p>
+
+                  <p class="col-xs-12 col-sm-4 form-group">
+                    <strong>CPF:</strong><br>
+                    {{customer.doc || 'Não há registro'}}
+                  </p>
+
+                  <p class="col-xs-12 col-sm-4 form-group">
+                    <strong>Data de nascimento:</strong><br>
+                    {{customer.birthDate || 'Não há registro'}}
+                  </p>
+
+                </div>
+
+                <div layout layout-sm="column" class="layout-sm-column layout-row ui-section font-md">
+
+                  <p class="col-xs-12 col-sm-4 form-group">
+                    <strong>Email:</strong><br>
+                    {{customer.email || 'Não há registro'}}
+                  </p>
+
+                  <p class="col-xs-12 col-sm-4 form-group">
+                    <strong>Telefone:</strong><br>
+                    {{customer.phone || 'Não há registro'}}
+                  </p>
+                </div>
+
+                <div layout layout-sm="column" class="layout-sm-column layout-row ui-section font-md">
+
+                  <p class="col-xs-12 col-sm-4 form-group">
+                    <strong>Endereço:</strong><br>
+                    {{customer.address || 'Não há registro'}}
+                  </p>
+
+                  <p class="col-xs-12 col-sm-4 form-group">
+                    <strong>Cidade:</strong><br>
+                    {{customer.city || 'Não há registro'}}
+                  </p>
+
+                  <p class="col-xs-12 col-sm-4 form-group">
+                    <strong>Estado:</strong><br>
+                    {{customer.state || 'Não há registro'}}
+                  </p>
+
+                </div>
+
+              </div>
+            </div>
+            <!--END: User info-->
+            <!--START: Vehicle info-->
+            <div class="row">
+              <div class="col-md-12 m-t-20">
+                <div class="panel-heading form-name m-b-20">Veículo(s) deste cliente</div>
+
+                <!--START: Lista Veículos -->
+                <div ng-repeat="item in customer.vehicles">
+                  <div class="col-md-6">
+                    <div class="card bg-white">
+                      <div class="card-image">
+                        <img src="images/assets/vehicle.jpg">
+                        <span class="card-title">{{item.brand}} {{item.name}}</span>
+                      </div>
+                      <div class="card-content">
+                        <div class="row">
+                          <div class="col-xs-12 col-sm-6 form-group">
+                            <strong>Placa:</strong><br>
+                            {{item.plate || 'Não há registro'}}
+                          </div>
+
+                          <div class="col-xs-12 col-sm-6 form-group">
+                            <strong>Quilometragem:</strong><br>
+                            {{item.km || 'Não há registro de'}} km
+                          </div>
+
+                          <div class="col-xs-12 col-sm-6 form-group">
+                            <strong>Ano de fabricação:</strong><br>
+                            {{item.year || 'Não há registro'}}
+                          </div>
+
+                          <div class="col-xs-12 col-sm-6 form-group">
+                            <strong>Ano de modelo:</strong><br>
+                            {{item.model || 'Não há registro'}}
+                          </div>
+
+                          <div class="col-xs-12 col-sm-12 form-group">
+                            <strong>Especificação:</strong><br>
+                            {{item.specification || 'Não há registro'}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--END: Lista Veículos -->
+
+              </div>
+            </div>
+            <!--END: Vehicle info-->
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

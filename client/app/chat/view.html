@@ -1,0 +1,108 @@
+<div class="conversation">
+  <div class="row header-conversation">
+
+    <div class="text-right col-sm-12">
+      <md-button
+        ng-click="cancel()"
+        uib-tooltip="Fechar visualização"
+        tooltip-append-to-body="true"
+        tooltip-placement="top"
+        class="md-fab md-button md-fab-xs closeButton">
+        <span class="ng-scope text-blue"><i class="zmdi zmdi-close p-b-20"></i></span>
+      </md-button>
+    </div>
+
+    <div class="col-xs-1">
+      <img src="https://s3-sa-east-1.amazonaws.com/automobi-assets/avatar-cinza.png" class="img-responsive">
+    </div>
+    <div ng-click="openCustomerDetailsModal()" class="col-xs-5">
+      <h3>{{Chat.customer.fullname }}
+        <span class="zmdi zmdi-info-outline info-icon"
+              tooltip-placement="bottom"
+              uib-tooltip="Informações deste cliente" tooltip-append-to-body="true"></span>
+      </h3>
+    </div>
+    <div class="col-xs-6 text-right">
+
+      <button ng-click="agendar()" permission permission-only="permissions.createSchedule"
+              ui-sref="schedulecreate({id: Chat.customer._id})"
+              class="md-raised btn-w-xs btn-success md-button md-ink-ripple m-l-5"
+              tooltip-placement="bottom" uib-tooltip="Novo agendamento para este cliente"
+              tooltip-append-to-body="true">
+        <span>
+          AGENDAR SERVIÇO
+        </span>
+      </button>
+
+      <button ng-click="closeChat()" ng-disabled="ctrl.disableChatButton" ng-show="!Chat.isClosed"
+              class="md-raised btn-w-xs md-button md-ink-ripple half-opacity"
+              tooltip-placement="bottom" uib-tooltip="Encerrar conversa com este cliente"
+              tooltip-append-to-body="true">
+        <span>
+          ENCERRAR CHAT
+        </span>
+      </button>
+
+    </div>
+  </div>
+  <div class="body-conversation" id="mCSB_2">
+    <div ng-repeat="item in Chat.messages track by $index">
+
+      <div class="each-talk" ng-class="item.type" ng-if="item.isTalk">
+        <div class="col-xs-2 no-padding" ng-if="item.type == 'talk-user'">
+          <img src="https://s3-sa-east-1.amazonaws.com/automobi-assets/avatar-cinza.png" class="img-responsive">
+        </div>
+        <div class="col-xs-10 talk">
+          <pre class="pattern-font-family">{{item.content}}</pre>
+          <small>{{(item.type == 'talk-attendant' ? "Atendente: " : "Cliente: ") + item.origin.name + " " +
+            item.origin.lastname + " enviou em " + (item.dateCreate | date:'dd/MM/yyyy') + ' às ' + (item.dateCreate |
+            date:'HH:mm')}}
+          </small>
+        </div>
+        <div class="col-xs-2 no-padding" ng-if="item.type == 'talk-attendant'">
+          <img src="https://s3-sa-east-1.amazonaws.com/automobi-assets/avatar-azul.png" class="img-responsive">
+        </div>
+      </div>
+
+      <div class="each-talk closure" ng-class="item.type" ng-if="!item.isTalk">
+        <p ng-if="item.type == 'closure'">{{item.content}}</p>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="row footer-conversation">
+    <form>
+      <div class="col-xs-12 no-padding yellow alert-message" ng-show="isErrorSendMessage">
+        <p>Não foi possivel enviar sua mensagem, aguarde...</p>
+      </div>
+      <div class="col-xs-12 no-padding" ng-show="isSendMessage">
+        <p>Enviando...</p>
+      </div>
+      <div class="col-xs-12 no-padding yellow alert-message" ng-show="isErrorSendMessageTimeout">
+        <p>Ops! Algo não ocorreu como o esperado e não conseguimos enviar sua mensagem. Recarregue a página e tente
+          novamente. Caso o problema persista, entre em contato com nosso <a href="email:suporte@automobi.com.br">suporte</a>.
+        </p>
+      </div>
+      <div class="col-xs-10 no-padding">
+        <div class="form-group">
+          <textarea rows="2" class="form-control" ng-class="{yellow: isErrorSendMessage}"
+                    ng-disabled="isErrorSendMessage || isSendMessage || isErrorSendMessageTimeout"
+                    ng-keydown="keyPressed($event)"
+                    ng-trim="false"
+                    focus-on="messageSent"
+                    tabindex="-1"
+                    ng-model="newMessage"></textarea>
+        </div>
+      </div>
+      <div class="col-xs-2 no-padding">
+        <div class="group-form">
+          <button ng-click="sendMessage()" class="btn btn-primary"
+                  data-ng-disabled="isErrorSendMessage || isSendMessage || isErrorSendMessageTimeout">
+            <span class="fa fa-send"></span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

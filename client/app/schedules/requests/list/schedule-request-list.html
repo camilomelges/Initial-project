@@ -1,0 +1,231 @@
+<!--<div class="page page-table" data-ng-controller="CustomerListCtrl">-->
+<div class="page">
+  <div class="row ui-section">
+    <div class="col-md-12">
+      <h2 class="section-header">Solicitações de Agendamento</h2>
+    </div>
+  </div>
+  <div class="ui-section">
+    <div class="panel panel-default panel-labeled">
+      <div class="panel-body p-t-20">
+        <div class="col-md-12">
+          <div class="col-sm-8 box-tabs">
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+            ng-class="{'btn-filter-active': ctrl.statusFilter == 'requested'}"
+            ng-click="filterByStatus('requested')"
+            tooltip-placement="bottom" uib-tooltip="Ver solicitações"
+            tooltip-append-to-body="true">
+            Solicitados
+            </button>
+            <span class="space"></span>
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+            ng-class="{'btn-filter-active': ctrl.statusFilter == 'pending'}"
+            ng-click="filterByStatus('pending')"
+            tooltip-placement="bottom" uib-tooltip="Ver solicitações pendentes"
+            tooltip-append-to-body="true">
+            Pendentes
+            </button>
+            <span class="space"></span>
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+            ng-class="{'btn-filter-active': ctrl.statusFilter == 'canceled'}"
+            ng-click="filterByStatus('canceled')"
+            tooltip-placement="bottom" uib-tooltip="Ver solicitações canceladas"
+            tooltip-append-to-body="true">
+            Cancelados
+            </button>
+            <span class="space"></span>
+            <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+            ng-class="{'btn-filter-active': ctrl.statusFilter == 'confirmed'}"
+            ng-click="filterByStatus('confirmed')"
+            tooltip-placement="bottom" uib-tooltip="Ver solicitações finalizadas"
+            tooltip-append-to-body="true">
+            Finalizados
+            </button>
+          </div>
+          <div class="col-sm-4 box-filters">
+            <uib-accordion close-others="!oneAtATime" class="ui-accordion">
+            <uib-accordion-group heading="Filtros" is-open="status.isFirstOpen1">
+            <div class="col-sm-6 no-padding text-left">
+              <label>
+                <input name="searchType" type="radio" id="required_checkbox" required=""
+                data-ng-model="ctrl.showDateField" value="true"
+                class="ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
+                aria-invalid="true" style="margin-top:-10px;">
+              &nbsp;&nbsp;Por dia</label>
+            </div>
+            <div class="col-sm-6 no-padding text-right">
+              <label>
+                <input name="searchType" type="radio" id="required_checkbox" required=""
+                data-ng-model="ctrl.showDateField" value="false" ng-click="showAllDates()"
+                class="ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
+                aria-invalid="true">
+              &nbsp;&nbsp;Todas as datas</label>
+            </div>
+            <div class="col-sm-12 no-padding text-left m-t-10" ng-show="ctrl.showDateField == 'true'">
+              <div class="form-group">
+                <label>
+                  <strong>Data</strong>
+                </label>
+                <div class="ui-datepicker">
+                  <input type="text"
+                  class="form-control"
+                  uib-datepicker-popup="{{calendar.format}}"
+                  ng-model="calendar.selectedDate"
+                  is-open="calendar.calendarOpen"
+                  min-date="calendar.minDate"
+                  max-date="calendar.maxDate"
+                  datepicker-options="calendar.dateOptions"
+                  date-disabled="calendar.disabled(date, mode)"
+                  ng-required="true"
+                  clear-text='Limpar'
+                  close-text='Fechar'
+                  current-text='Hoje'
+                  show-button-bar="false"
+                  popup-placement="auto top-left"
+                  alt-input-formats="calendar.altInputFormats"
+                  ng-click="calendar.calendarOpen = true"
+                  ng-change="filterByDate()"/>
+                </div>
+              </div>
+            </div>
+            </uib-accordion-group>
+            <uib-accordion-group heading="{{group.title}}" ng-repeat="group in groups">
+            {{group.content}}
+            </uib-accordion-group>
+            </uib-accordion>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <!--INICIO Table de solicitacoes-->
+          <table class="table no-margin" ng-show="ctrl.currentRequests.length">
+            <thead>
+              <tr>
+                <th>Ligue-me às</th>
+                <th>Cliente</th>
+                <th>Carro</th>
+                <th>Placa</th>
+                <th>Serviço</th>
+                <th>Criado em</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in ctrl.currentRequests track by item._id"
+                ng-class="{'am-warning': set_color(item) === 'warning', 'am-danger': set_color(item) === 'danger', 'am-now': set_color(item) === 'now'}">
+                <td><span>{{item.callMeAt.date | date:'dd/MM/yyyy'}} {{item.callMeAt.time}}</span></td>
+                <td>{{item.customer.fullname}} {{item.customer.companyName}}</td>
+                <td><span>{{item.vehicle.name}}</span></td>
+                <td width="120"><span>{{item.vehicle.plate}}</span></td>
+                <td width="210">
+                  <span>{{item.services.join(", ")}}</span>
+                  <span>{{item.otherService}}</span>
+                  <span>{{item.observation}}</span>
+                </td>
+                <!--<td><span>HB Anhaia Mello</span></td>-->
+                <td><span>{{item.dateCreate | date:'dd/MM/yyyy'}}</span></td>
+                <td class="p-t-10">
+                  <div>
+                    <button ng-hide="ctrl.statusFilter != 'requested' && ctrl.statusFilter != 'pending'" ng-disabled="ctrl.disableScheduleButton == true" class="md-raised btn-w-md md-button md-ink-ripple pull-right btn-success"
+                    tooltip-placement="bottom" uib-tooltip="Agendar esta solicitação" tooltip-append-to-body="true"
+                    ng-click="schedule({id: item._id})">
+                    <span>Agendar</span>
+                    </button>
+                  </div>
+
+                  <button ng-show="ctrl.statusFilter == 'canceled' || ctrl.statusFilter == 'confirmed'" ui-sref="schedulerequests.view({id: item._id})"
+                  class="md-raised btn-w-xs md-button md-ink-ripple m-l-5"
+                  tooltip-placement="bottom" uib-tooltip="Visualizar esta solicitação de agendamento"
+                  tooltip-append-to-body="true">
+                  <span><span class="fa fa-calendar"></span></span>
+                  </button>
+                  <!--<button ng-show="item.status != 'requested' && item.status != 'confirmed'"-->
+                  <!--class="md-raised btn-w-xs md-button md-ink-ripple"-->
+                  <!--tooltip-placement="bottom" uib-tooltip="Alterar status"-->
+                  <!--tooltip-append-to-body="true">-->
+                  <!--<span class="fa fa-refresh"></span>-->
+                  <!--</button>-->
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+            </tfoot>
+          </table>
+          <!--FIM Table de solicitacoes-->
+          <!--INICIO Table de solicitacoes pendentes-->
+          <!--<table class="table no-margin">-->
+          <!--<thead>-->
+          <!--<tr>-->
+          <!--<th>Ligue-me às</th>-->
+          <!--<th>Cliente</th>-->
+          <!--<th>Placa</th>-->
+          <!--<th>Serviço</th>-->
+          <!--<th>Unidade</th>-->
+          <!--<th>Criado em</th>-->
+          <!--<th></th>-->
+          <!--</tr>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+          <!--<tr class="bg-red">-->
+          <!--<td><span>Hoje às 09:00</span></td>-->
+          <!--<td>Gilmar Bizulli</td>-->
+          <!--<td width="120"><span>FOL-2088</span></td>-->
+          <!--<td width="210"><span>Revisão 10.000, cambagem, alinhamento e balanceamento</span></td>-->
+          <!--<td><span>HB Anhaia Mello</span></td>-->
+          <!--<td><span>10/04/2017</span></td>-->
+          <!--<td class="p-t-10">-->
+          <!--<button ui-sref="#/scheduleviewrequest" class="md-raised btn-w-xs btn-success md-button md-ink-ripple"-->
+          <!--tooltip-placement="bottom" uib-tooltip="Agendar este cliente"-->
+          <!--tooltip-append-to-body="true">-->
+          <!--<span>Agendar</span>-->
+          <!--</button>-->
+          <!--<button ui-sref="#/scheduleviewrequest" class="md-raised btn-w-xs md-button md-ink-ripple"-->
+          <!--tooltip-placement="bottom" uib-tooltip="Alterar Status"-->
+          <!--tooltip-append-to-body="true">-->
+          <!--<span class="fa fa-refresh"></span>-->
+          <!--</button>-->
+          <!--</td>-->
+          <!--</tr>-->
+          <!--<tr class="bg-yellow">-->
+          <!--<td><span>10/04/2017 às 09:00</span></td>-->
+          <!--<td>Gilmar Bizulli Santos Silva</td>-->
+          <!--<td width="120"><span>FOL-2088</span></td>-->
+          <!--<td width="210"><span>Revisão 10.000</span></td>-->
+          <!--<td><span>HB Ipiranga</span></td>-->
+          <!--<td><span>10/04/2017</span></td>-->
+          <!--<td class="p-t-10">-->
+          <!--<button ui-sref="#/scheduleviewrequest" class="md-raised btn-w-xs btn-success md-button md-ink-ripple"-->
+          <!--tooltip-placement="bottom" uib-tooltip="Agendar este cliente"-->
+          <!--tooltip-append-to-body="true">-->
+          <!--<span>Agendar</span>-->
+          <!--</button>-->
+          <!--<button class="md-raised btn-w-xs md-button md-ink-ripple"-->
+          <!--tooltip-placement="bottom" uib-tooltip="Alterar status"-->
+          <!--tooltip-append-to-body="true">-->
+          <!--<span class="fa fa-refresh"></span>-->
+          <!--</button>-->
+          <!--</td>-->
+          <!--</tr>-->
+          <!--</tbody>-->
+          <!--</table>-->
+          <!--FIM Table de solicitacoes pendentes-->
+          <div ng-hide="ctrl.currentRequests.length" class="text-center">
+            <p><i>Não há solicitações de agendamento com esse status</i></p>
+          </div>
+          <div ng-if="ctrl.statusFilter == 'pending' || ctrl.statusFilter == 'requested' " class="table-subtitle">
+            <ul>
+              <li class="subtitle-am-warning">
+                <span class="fa fa-circle"></span> Contato em 10 minutos
+              </li>
+              <li class="subtitle-am-danger">
+                <span class="fa fa-circle"></span> Contato em 5 minutos
+              </li>
+              <li class="subtitle-am-now">
+                <span class="fa fa-circle"></span> Entre em contato agora
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

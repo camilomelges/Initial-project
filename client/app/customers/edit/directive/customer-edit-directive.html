@@ -1,0 +1,178 @@
+<div class="row">
+  <div class="row no-marging" style="margin-right: 0">
+    <div class="col-sm-6">
+      <p class="light-gray-text">EDITANDO INFORMAÇÕES</p>
+    </div>
+  </div>
+  <div class="row no-marging">
+    <form name="customer_edit_form" ng-submit="save(customer_edit_form)" novalidate>
+      <!-- Name or Company Name-->
+      <div class="row p-t-10 no-marging">
+        <div ng-switch on="ctrl.customer.personType.type">
+          <div class="col-sm-10" ng-switch-when="physical">
+            <label>Nome Completo *</label>
+            <input name="fullname" ng-required="ctrl.customer.personType.type == 'physical'" type="text" class="form-control"
+                   data-ng-model="ctrl.customer.fullname">
+
+            <div class="col-sm-12 no-padding" style="padding-top: 5px !important;" ng-messages="customer_edit_form.fullname.$error"
+                 ng-if='customer_edit_form.$submitted && customer_edit_form.fullname.$error'>
+              <div ng-message="required" class="invalid-text">Campo requerido</div>
+            </div>
+          </div>
+          <div class="col-sm-10" ng-switch-when="legal">
+            <label>Razão Social *</label>
+            <input name="companyName" ng-required="ctrl.customer.personType.type == 'legal'" type="text" class="form-control"
+                   data-ng-model="ctrl.customer.companyName">
+
+            <div class="col-sm-12 no-padding" style="padding-top: 5px !important;" ng-messages="customer_edit_form.companyName.$error"
+                 ng-if='customer_edit_form.$submitted && customer_edit_form.companyName.$error'>
+              <div ng-message="required" class="invalid-text">Campo requerido</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone -->
+      <div class="row p-t-10 no-marging">
+        <div class="col-sm-10">
+          <label>Telefone *</label>
+          <input type="text" required name="phone" class="form-control" data-ng-model="ctrl.customer.phone"
+                 pattern="\([0-9]{2}\) [0-9]{4}-[0-9]{4}|\([0-9]{2}\) [0-9]{5}-[0-9]{4}"
+                 ui-br-phone-number>
+          <small>Telefone no formato. Ex: (11) 99999-9999</small>
+
+          <div class="col-sm-12 no-padding" style="padding-top: 5px !important;" ng-messages="customer_edit_form.phone.$error"
+               ng-if='customer_edit_form.$submitted && customer_edit_form.phone.$error'>
+            <div ng-message="required" class="invalid-text">Campo requerido</div>
+            <div ng-message="pattern" class="invalid-text">Precisa ser um telefone válido. Ex: (11) 99999-9999</div>
+          </div>
+        </div>
+      </div>
+      <!-- E-mail -->
+      <div class="row p-t-10 no-marging">
+        <div class="col-sm-10">
+          <label>E-mail</label>
+          <input ng-pattern='/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+                 type="text" class="form-control" name="email"
+                 data-ng-model="ctrl.customer.email">
+
+          <div class="col-sm-12 no-padding" style="padding-top: 5px !important;" ng-messages="customer_edit_form.email.$error"
+               ng-if='customer_edit_form.$submitted && customer_edit_form.email.$error'>
+            <div ng-message="pattern" class="invalid-text">Email inválido</div>
+          </div>
+        </div>
+      </div>
+      <!-- Type person -->
+      <div class="row p-t-10 no-marging">
+        <div class="col-sm-5 partner-create">
+          <label>Tipo de pessoa:</label>
+          <select chosen ng-model="ctrl.customer.personType"
+                  aria-label="select"
+                  class="full-width"
+                  ng-change="switchTypePerson()"
+                  disable-search="true"
+                  data-placeholder-text-single="' '"
+                  no-results-text="'não foi encontrado'"
+                  data-ng-options="item.person for item in ctrl.personTypes track by item.type">
+            <option value=""></option>
+          </select>
+        </div>
+        <div ng-switch on="ctrl.customer.personType.type">
+          <div class="col-sm-5" ng-switch-when="physical">
+            <label>CPF</label>
+            <input type="text" name="cpf" class="form-control" ui-br-cpf-mask
+                   data-ng-model="ctrl.customer.doc">
+
+            <div class="col-sm-12 no-padding" style="padding-top: 5px !important;" ng-messages="customer_edit_form.cpf.$error"
+                 ng-if='customer_edit_form.$submitted && customer_edit_form.cpf.$error'>
+              <div ng-message="cpf" class="invalid-text">CPF inválido</div>
+            </div>
+          </div>
+          <div class="col-sm-5" ng-switch-when="legal">
+            <label>CNPJ</label>
+            <input type="text" name="cnpj" class="form-control" ui-br-cnpj-mask
+                   data-ng-model="ctrl.customer.doc">
+
+            <div class="col-sm-12 no-padding" style="padding-top: 5px !important;" ng-messages="customer_edit_form.cnpj.$error"
+                 ng-if='customer_edit_form.$submitted && customer_edit_form.cnpj.$error'>
+              <div ng-message="cnpj" class="invalid-text">CNPJ inválido</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Address -->
+      <div class="row p-t-10 no-marging">
+        <div class="col-sm-10">
+          <label>Endereço completo</label>
+          <input type="text" class="form-control" data-ng-model="ctrl.customer.address">
+        </div>
+      </div>
+      <!-- State and city -->
+      <div class="row p-t-10 no-marging">
+        <div class="col-sm-4 partner-create">
+          <label>Estado</label>
+          <select chosen class="full-width"
+                  data-placeholder-text-single="' '"
+                  no-results-text="'não foi encontrado'"
+                  ng-model="ctrl.customer.state"
+                  ng-change="stateChange()"
+                  data-ng-options="item.name for item in ctrl.states">
+            <option value=""></option>
+          </select>
+        </div>
+        <div class="col-sm-6 partner-create">
+          <label>Cidade</label>
+          <select chosen class="full-width"
+          ng-model="ctrl.customer.city"
+          data-placeholder-text-single="' '"
+          no-results-text="'não foi encontrado'"
+          data-ng-options="item.name for item in ctrl.cities"
+          aria-label="select" ng-change="cityChange(ctrl.city)">
+          <option value=""></option>
+          </select>
+        </div>
+      </div>
+      <!-- Birth date -->
+      <div class="row p-t-10 no-marging">
+        <div ng-switch on="ctrl.customer.personType.type">
+          <div class="col-sm-10">
+            <label ng-switch-when="physical">Data de aniversário</label>
+            <label ng-switch-when="legal">Data de criação</label>
+            <div class="ui-datepicker box-result">
+              <input type="text"
+                     class="form-control"
+                     uib-datepicker-popup="{{calendar.format}}"
+                     ng-model="ctrl.customer.birthDate"
+                     is-open="calendar.calendarOpen"
+                     datepicker-options="calendar.dateOptions"
+                     clear-text='Limpar'
+                     close-text='Fechar'
+                     current-text='Hoje'
+                     show-button-bar="false"
+                     popup-placement="auto bottom-left"
+                     ng-keyup="calendar.calendarOpen = true"
+                     alt-input-formats="calendar.altInputFormats"
+                     ng-click="calendar.calendarOpen = true"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Buttom Save -->
+      <div class="row p-t-10 no-marging">
+        <div class="col-sm-5 m-t-20 m-b-20">
+          <button type="button" class="btn-w-md md-button md-ink-ripple half-opacity"
+                  tooltip-placement="bottom"
+                  ng-disabled="ctrl.isWaiting"
+                  tooltip-append-to-body="true"
+                  ng-click="cancel()">
+            <span style="color: #686b78;" class="ng-scope">Cancelar</span>
+          </button>
+        </div>
+        <div class="col-sm-5 m-t-20 m-b-20" style="text-align: end;">
+          <button type="submit" ui-wave="" ng-disabled="ctrl.isWaiting"
+                  class="md-raised btn-w-md btn-primary md-button md-ink-ripple">Salvar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

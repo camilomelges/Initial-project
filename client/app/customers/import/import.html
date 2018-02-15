@@ -1,0 +1,49 @@
+<div class="page page-table">
+  <form name="form_constraints" novalidate>
+    <div class="row ui-section">
+      <div class="col-xs-12 col-sm-10">
+        <h2 class="section-header">Importar Clientes</h2>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body p-30">
+        <div class="box-itens-campaign">
+          <ul class="ul-box-campaign">
+            <li class="each-itens">
+              <div class="form-group m-t-10" style="max-width: 500px;float:left;">
+                <label>Importar planilha de clientes:</label>
+                <div class="input-group">
+                  <label ng-click="importPlanilha()" class="btn btn-primary md-button btn-lg" for="fileUpload">Escolher
+                    planilha</label>
+                  <input id="fileUpload" style="display: none;" type="file" ngf-select ngf-pattern="'.xls,.csv,.xlsx'"
+                         accept=".xls,.csv,.xlsx" ngf-max-files="1" ng-model="file"
+                         ngf-multiple="false" class="form-control" required>
+                </div>
+                <div class="p-t-10">
+                  <a ng-click="downloadPlanilha()" class="text-blue padding-5"
+                     href="https://s3-sa-east-1.amazonaws.com/automobi-public/crm/Modelo+de+CSV+para+importar+Clientes+(RR).xlsx"
+                     download="https://s3-sa-east-1.amazonaws.com/automobi-public/crm/Modelo+de+CSV+para+importar+Clientes+(RR).xlsx">
+                    <span class="fa fa-download"></span> Baixar modelo da planilha de clientes
+                  </a>
+                </div>
+              </div>
+              <div style="max-width: 600px;float:left;">
+                <div id="listResult">
+                  <div ng-if="listClients.length > 0" class="box-result-import">
+                    <span>{{listClients.length}}</span>
+                    <small>clientes importados</small>
+                  </div>
+                  <div ng-if="listClientsErr.length > 0" class="box-result-import error">
+                    <span>{{listClientsErr.length}}</span>
+                    <small>itens da lista foram rejeitados</small>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

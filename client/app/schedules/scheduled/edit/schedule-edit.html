@@ -1,0 +1,683 @@
+<!--<div class="page page-table" data-ng-controller="CustomerListCtrl">-->
+<div class="page">
+
+  <div class="row ui-section">
+    <div class="col-md-8">
+      <h2 class="section-header">{{ctrl.title}}</h2>
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn-w-md md-button md-ink-ripple half-opacity pull-left"
+              tooltip-placement="bottom"
+              ng-disabled="ctrl.disableCancelButton"
+              tooltip-append-to-body="true"
+              ng-click="cancelSchedule()">
+        <span style="color: #686b78;" class="ng-scope">Cancelar</span>
+      </button>
+    </div>
+    <div class="panel-body col-sm-2 no-padding">
+
+      <button data-ng-disabled="ctrl.isWaiting" ng-click="saveSchedule()" class="md-raised btn-w-md btn-primary md-button md-ink-ripple"
+              analytics-on="click" analytics-event="AgendamentoRealizado">{{ctrl.saveFormButton}}
+      </button>
+    </div>
+  </div>
+
+
+
+  <div class="ui-section form-schedule">
+    <div class="panel panel-default panel-labeled panel-body"
+         style="padding-top: 50px;
+           padding-left: 35px;
+           padding-right: 35px;">
+      <div class="col-sm-12">
+
+        <!--DateTime and Customer row-->
+        <div class="row gray-border-bottom">
+
+          <!--Datetime-->
+          <div class="col-sm-5">
+            <div class="row">
+              <h2 style="text-align: start; font-size: 15px;
+                font-weight: 400; margin-left: 3px;"
+                  class="section-header gray-text">Data e horário</h2>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 no-padding" style="text-align: start">
+                <label>*Data</label>
+              </div>
+              <div class="col-sm-4 p-l-20" style="text-align: start">
+                <label>*Horário</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 no-padding box-result">
+                <div class="ui-datepicker">
+                  <input type="text"
+                         class="form-control"
+                         uib-datepicker-popup="{{calendar.format}}"
+                         ng-model="calendar.selectedDate"
+                         init-date="calendar.dateOptions.initDate"
+                         is-open="calendar.calendarOpen"
+                         datepicker-options="calendar.dateOptions"
+                         ng-required="true"
+                         clear-text='Limpar'
+                         close-text='Fechar'
+                         ng-change="checkError('date')"
+                         current-text='Hoje'
+                         show-button-bar="false"
+                         popup-placement="auto bottom-left"
+                         ng-keyup="calendar.calendarOpen = true"
+                         alt-input-formats="calendar.altInputFormats"
+                         ng-click="calendar.calendarOpen = true"/>
+                  <p ng-show="ctrl.error.date" class="invalid-text m-t-5">
+                    Campo Requerido
+                  </p>
+                </div>
+              </div>
+              <div class="col-sm-4 no-padding p-l-20 partner-create" style="padding: 0">
+                <select chosen required
+                        class="full-width"
+                        name="selectedService"
+                        ng-change="checkError('hour')"
+                        data-placeholder="Selecione"
+                        allow-single-deselect="true"
+                        data-placeholder-text-single="'Selecione'"
+                        no-results-text="'Não foi encontrado'"
+                        ng-model="ctrl.selectedHour"
+                        data-ng-options="item for item in ctrl.timeOptions">
+                  <option value=""></option>
+                </select>
+                <p ng-show="ctrl.error.hour" class="invalid-text m-t-5">
+                  Campo Requerido
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!--Customer-->
+          <div class="col-sm-7 p-b-50 gray-border-left" style="padding-left: 5em; margin-left: -1px; padding-bottom: 4em">
+            <div class="row">
+              <h2 style=".text-align: start; font-size: 15px; font-weight: 400; margin-left: 3px;"
+                  class="section-header gray-text">Cliente</h2>
+            </div>
+            <div ng-hide="ctrl.selectedCustomer">
+              <div class="row">
+                <div class="col-sm-6 no-padding" style="text-align: start">
+                  <label>Selecione o cliente</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 no-padding partner-create" style="padding: 0;">
+                  <ui-select
+                    allow-clear
+                    ng-model="ctrl.selectedCustomer"
+                    ng-change="toggleVehicle()"
+                    theme="bootstrap">
+                    <ui-select-match placeholder="Escreva para encontrar o cliente">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices
+                      repeat="item in ctrl.customerArray | filter: $select.search"
+                      refresh="refreshListWithSearch($select.search)">
+
+                      <span ng-bind-html="item.fullname | highlight: $select.search"></span>
+                      <small ng-bind-html="item.email | highlight: $select.search"></small>
+                      <small ng-bind-html="item.phone | highlight: $select.search"></small>
+
+                    </ui-select-choices>
+                    <ui-select-no-choice style="padding: 10px">
+                      Não foi encontrado nenhum cliente com sua busca :(
+                    </ui-select-no-choice>
+                  </ui-select>
+                </div>
+              </div>
+            </div>
+            <div ng-show="ctrl.selectedCustomer">
+              <div class="row">
+                <div class="col-sm-12 dark-gray-text" style="text-align: start; padding-left: 3px;">
+                  <h4>{{ctrl.selectedCustomer.fullname}}</h4>
+                </div>
+              </div>
+              <div class="row">
+                <div ng-show="ctrl.selectedCustomer.phone" class="col-sm-4 partner-create" style="padding-left: 3px">
+                  <span class="fa fa-phone dark-gray-text"></span>
+                  <span class="gray-text" style="font-weight: normal;">
+                      {{ctrl.selectedCustomer.phone}}
+                    </span>
+                </div>
+                <div ng-show="ctrl.selectedCustomer.email" class="col-sm-6 partner-create" style="padding-left: 3px">
+                  <span class="fa fa-envelope-o dark-gray-text"></span>
+                  <span class="gray-text" style="font-weight: normal;">
+                      {{ctrl.selectedCustomer.email}}
+                    </span>
+                </div>
+                <div class="col-sm-2 partner-create" style="padding-left: 3px; padding-top: 0px;">
+                  <new-chat ng-if="ctrl.selectedCustomer.mobileActive"
+                            value="ctrl.selectedCustomer"></new-chat>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Services and vehicle row-->
+        <div class="row m-b-30">
+
+          <!--Services-->
+          <div class="col-sm-5">
+
+            <!--Service list and Form-->
+            <div class="row p-b-30 p-t-20 gray-border-bottom"
+                 style="padding-left: 15px;
+                 padding-bottom: 3em;
+                border-right: 1px solid #EBEBEB;">
+              <div class="row">
+                <h2 style="text-align: start; font-size: 15px; font-weight: 400; margin-left: 3px;"
+                    class="section-header gray-text">Serviços</h2>
+              </div>
+
+              <!--Services list-->
+              <div class="row" style="margin-right: 0">
+                <div class="p-t-10 m-b-20" ng-show="ctrl.servicesDetailed.length > 0">
+                  <ul style="list-style: none; padding-left: 0px;">
+                    <li class="row gray-border-bottom" style="margin: 0;
+                      line-height: 35px" ng-repeat="service in ctrl.servicesDetailed">
+                      <div style="padding-left: 3px; padding-right: 0px;padding-top: 10px;" class="col-md-5">
+                        <p><b> {{service.name}}</b></p>
+                      </div>
+                      <div class="col-md-7 text-right no-padding" ng-if="!service.diagnosticObservation">
+                        <span class="gray-text" style="display: inline-block;" ng-show="service.inspectionKm">
+                          {{service.inspectionKm}} km</span>
+                        <span class="gray-text" style="display: inline-block;" ng-show="service.inspectionTime">
+                          {{service.inspectionTimeString}}</span>
+                        <span class="gray-text" style="display: inline-block;padding-left:20px;"
+                              ng-show="service.durationTime">
+                          {{service.durationTime}}min
+                        </span>
+                        <a ng-click="removeService($index, service)"
+                           style="font-size: 20px;display: inline-block;padding-left:20px;margin-right: 10px;"
+                           class="hover-color-remove gray-text">
+                          <span class="fa fa-trash"></span>
+                        </a>
+                      </div>
+                      <div class="col-sm-12 text-right no-padding m-b-10" ng-if="service.diagnosticObservation">
+                        <div class="col-sm-11 no-padding" style="padding-left: 3px!important;">
+                          <p readonly="true" class="full-width no-border diagnostic-text"><b>Observação: </b>{{service.diagnosticObservation}}</p>
+                        </div>
+                        <div class="col-sm-1 no-padding">
+                          <a ng-click="removeService($index, service)"
+                            style="font-size: 20px;display: inline-block; margin-right: 10px;"
+                            class="hover-color-remove gray-text">
+                            <span class="fa fa-trash"></span>
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+
+                <!--Service Form-->
+                <form name="add_service_form" ng-submit="addService(add_service_form)" novalidate>
+                  <div class="col-md-6 no-padding">
+                    <div class="row no-padding no-marging" style="text-align: start">
+                      <label>Escolha o serviço</label>
+                    </div>
+                    <div class="col-sm-12 partner-create m-b-10" style="padding-left: 0;">
+                      <select chosen required
+                              class="full-width"
+                              name="selectedService"
+                              data-placeholder="Selecione"
+                              allow-single-deselect="true"
+                              data-placeholder-text-single="'Clique para escolher um serviço'"
+                              no-results-text="'Não foi encontrado'"
+                              ng-model="ctrl.selectedService"
+                              ng-change="serviceSelected()"
+                              data-ng-options="item.name for item in ctrl.services">
+                        <option value=""></option>
+                      </select>
+                    </div>
+                    <div ng-show="ctrl.notServiceAddedError" class="invalid-text">*Adicione pelo menos um serviço.</div>
+                  </div>
+
+                  <div class="col-sm-6 m-t-20" ng-if="ctrl.selectedService && ctrl.diagnosticSelected">
+                    <div class="col-sm-2">
+                      <button type="submit" class="md-raised btn-w-xs btn-primary md-button md-ink-ripple"
+                      style="font-size: 10px; font-weight: 900; margin-left: -10px;
+                      margin-top: 8px; min-height: 23px;">Salvar
+                      </button>
+                    </div>
+                    <div class="col-sm-4">
+                      <button type="button" class="btn-w-xs md-button md-ink-ripple half-opacity"
+                      style="margin-left: 10px"
+                      tooltip-placement="bottom"
+                      tooltip-append-to-body="true"
+                      ng-click="cancelAddService()">
+                      <span style="color: #686b78;" class="ng-scope">X</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div ng-show="ctrl.selectedService && ctrl.diagnosticSelected" class="col-sm-12 no-padding">
+                    <div class="row no-marging" style="text-align: start;">
+                      <label>Observação</label>
+                    </div>
+                    <div class="col-sm-12" style="padding-left: 0;">
+                      <textarea ng-required="ctrl.diagnosticSelected" required name="durationTime" cols="2" rows="4" type="text" class="form-control"
+                      ng-model="ctrl.selectedService.diagnosticObservation"></textarea>
+                    </div>
+                    <div ng-show="!ctrl.selectedService.diagnosticObservation" class="invalid-text">*Campo obrigatório.</div>
+                  </div>
+
+                  <div ng-show="ctrl.selectedService && !ctrl.inspectionSelected && !ctrl.diagnosticSelected" class="col-sm-6 no-padding">
+                    <div class="row no-marging" style="text-align: start;">
+                      <label>Tempo do serviço</label>
+                    </div>
+                    <div class="col-sm-6" style="padding-left: 0;">
+                      <input name="durationTime" type="text" class="form-control"
+                             ng-model="ctrl.selectedService.durationTime" ui-number-mask="0">
+                    </div>
+                    <div class="col-sm-2">
+                      <button type="submit" class="md-raised btn-w-xs btn-primary md-button md-ink-ripple"
+                              style="font-size: 10px; font-weight: 900; margin-left: -10px;
+                              margin-top: 8px; min-height: 23px;">Salvar
+                      </button>
+                    </div>
+                    <div class="col-sm-4">
+                      <button type="button" class="btn-w-xs md-button md-ink-ripple half-opacity"
+                              style="margin-left: 10px"
+                              tooltip-placement="bottom"
+                              tooltip-append-to-body="true"
+                              ng-click="cancelAddService()">
+                        <span style="color: #686b78;" class="ng-scope">X</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div ng-show="ctrl.inspectionSelected" class="row">
+                    <div class="col-sm-3" style="margin-top: 35px; padding-right: 0px;">
+                      <input type="radio"
+                             ng-required="ctrl.inspectionSelected && !ctrl.inspectionParameter"
+                             ng-model="ctrl.inspectionParameter"
+                             name="inspection_param_time"
+                             aria-invalid="true"
+                             ng-change="clearInspectionParameter()"
+                             value="inspection_param_time">
+                      <label>Tempo</label>
+                      <div style="margin-top: 5px;" ng-messages="add_service_form.inspection_param_time.$error" multiple
+                           ng-if="add_service_form.$submitted && add_service_form.inspection_param_time.$error">
+                        <div ng-message="required" class="invalid-text">requerido</div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2" style="margin-top: 35px; margin-left: -10px;">
+                      <input type="radio"
+                             class="p-l-10"
+                             ng-required="ctrl.inspectionSelected && !ctrl.inspectionParameter"
+                             ng-model="ctrl.inspectionParameter"
+                             name="inspection_param_km"
+                             ng-change="clearInspectionParameter()"
+                             value="inspection_param_km">
+                      <label>Km</label>
+                      <div style="margin-top: 5px;" ng-messages="add_service_form.inspection_param_km.$error" multiple
+                           ng-if="add_service_form.$submitted && add_service_form.inspection_param_km.$error">
+                        <div ng-message="required" class="invalid-text">requerido</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--Inspection Parameter KM-->
+                  <div ng-show="ctrl.inspectionSelected" class="row p-t-20">
+
+                    <!--Inspection Parameter Km-->
+                    <div ng-show="ctrl.inspectionParameter === 'inspection_param_km'" class="col-sm-3">
+                      <label>Quilômetragem</label>
+                      <input name="inspectionkm"
+                             ng-required="ctrl.inspectionSelected
+                               && ctrl.inspectionParameter == 'inspection_param_km'"
+                             type="text" class="form-control"
+                             ng-model="ctrl.selectedService.inspectionKm"
+                             ui-number-mask="0">
+                      <div ng-messages="add_service_form.inspectionkm.$error" multiple
+                           ng-if="add_service_form.$submitted && add_service_form.inspectionkm.$error">
+                        <div ng-message="required" class="invalid-text">Campo requerido.</div>
+                      </div>
+                    </div>
+
+                    <!--Inspection Parameter Time-->
+                    <div ng-show="ctrl.inspectionParameter === 'inspection_param_time'" class="col-sm-3">
+                      <label>Tempo</label>
+                      <input name="inspectionTime"
+                             ng-required="ctrl.inspectionSelected
+                               && ctrl.inspectionParameter == 'inspection_param_time'"
+                             type="text" class="form-control"
+                             ng-model="ctrl.selectedService.inspectionTime"
+                             ui-number-mask="0">
+                      <div ng-messages="add_service_form.inspectionTime.$error" multiple
+                           ng-if="add_service_form.$submitted && add_service_form.inspectionTime.$error">
+                        <div ng-message="required" class="invalid-text">Campo requerido.</div>
+                      </div>
+                      <div class="col-sm-12">
+                        <p class="row p-t-10 gray-text">*em meses</p>
+                      </div>
+                    </div>
+
+                    <!--Inspection Time-->
+                    <div class="col-sm-5">
+                      <div class="row no-marging" style="text-align: start;">
+                        <label>Tempo do serviço</label>
+                      </div>
+                      <div class="col-sm-8" style="padding-left: 0;">
+                        <input name="durationTime" type="text" class="form-control"
+                               ng-model="ctrl.selectedService.durationTime" ui-number-mask="0">
+                      </div>
+                      <div class="col-sm-12">
+                        <p class="row p-t-10 gray-text">*em minutos</p>
+                      </div>
+                    </div>
+
+                    <!--Cancel button-->
+                    <div class="col-sm-2 no-padding" style="margin-top: 22px;">
+                      <button type="submit" class="md-raised btn-w-xs btn-primary md-button md-ink-ripple"
+                              style="font-size: 10px; font-weight: 900; margin-left: -10px; margin-top: 9px; min-height: 23px;">
+                        Salvar
+                      </button>
+                    </div>
+
+                    <!--Add button-->
+                    <div class="col-sm-2 no-padding"
+                         style="margin-top: 24px; margin-left: -2em;">
+                      <button type="button" class="btn-w-xs md-button md-ink-ripple half-opacity"
+                              style="margin-left: 10px;"
+                              tooltip-placement="bottom"
+                              tooltip-append-to-body="true"
+                              ng-click="cancelAddService()">
+                        <span style="color: #686b78;" class="ng-scope">X</span>
+                      </button>
+                    </div>
+
+                  </div>
+
+                </form>
+              </div>
+            </div>
+
+
+            <!--Schedule origen Selection-->
+            <div class="row gray-border-right p-t-20 p-b-20" permission
+                 permission-only="permissions.originSchedule">
+              <div ng-show="ctrl.splitedEmail" class="col-sm-12">
+                <div class="row">
+                  <h2 style="text-align: start; font-size: 15px;
+                      font-weight: 400;
+                      margin-left: 3px;"
+                      class="section-header gray-text"
+                  >Origem do agendamento:</h2>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-6 partner-create" style="padding-left: 0">
+                    <div class="form-group">
+                      <label>Origem:</label>
+                      <select chosen
+                              class="full-width"
+                              name="selectedOrigin"
+                              data-placeholder="Selecione"
+                              allow-single-deselect="false"
+                              data-placeholder-text-single="'Selecione'"
+                              no-results-text="'Não foi encontrado'"
+                              ng-model="ctrl.selectedOrigin"
+                              data-ng-options="item.name for item in ctrl.originSchedules">
+                        <option value=""></option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!--Save and cancel schedule buttons-->
+            <div class="row">
+              <div class="col-sm-12 p-t-20 text-center">
+
+                <button type="button" class="btn-w-md md-button md-ink-ripple half-opacity"
+                        tooltip-placement="bottom"
+                        tooltip-append-to-body="true"
+                        ng-click="cancelSchedule()()">
+                  <span style="color: #686b78;" class="ng-scope">Cancelar</span>
+                </button>
+
+                <button data-ng-disabled="ctrl.isWaiting" ng-click="saveSchedule()" class="md-raised btn-w-md btn-primary md-button md-ink-ripple"
+                        analytics-on="click" analytics-event="AgendamentoRealizado">{{ctrl.saveFormButton}}
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!--Vehicle-->
+          <div class="col-sm-7 p-t-20 gray-border-left p-lem-5"
+               style="margin-left: -1px;">
+            <!--Title-->
+            <div class="row m-b-10">
+              <div class="col-sm-9 no-padding">
+                <h2 style="text-align: start; font-size: 15px; font-weight: 400; margin-left: 3px;"
+                    class="section-header gray-text">
+                  {{ctrl.btnAddVehicle ? 'Novo veículo' : 'Veículo para o serviço'}}
+                </h2>
+              </div>
+
+              <div ng-show="ctrl.selectedCustomer" class="col-sm-3" style="
+                   margin-top: -5px;
+                   padding-top: 5px;
+                   padding-right: 0px;">
+                <button type="button"
+                        class="btn-w-xs md-button md-ink-ripple half-opacity pull-left"
+                        tooltip-placement="bottom"
+                        tooltip-append-to-body="true"
+                        ng-click="toggleVehicleForm()">
+                  <span class="ng-scope text-blue">{{ctrl.btnAddVehicle ? 'Cancelar' : 'Novo veículo'}}</span>
+                </button>
+              </div>
+            </div>
+
+            <div ng-if="!ctrl.btnAddVehicle">
+              <!--Menu-->
+              <div class="row p-b-10">
+                <div ng-hide="ctrl.selectedCustomer" class="col-sm-12 no-padding m-b-20 gray-text"
+                     style="text-align: start;">
+                  <label>Selecione um cliente para ver o veículo.</label>
+                </div>
+                <div ng-show="ctrl.selectedCustomer" class="col-sm-12 no-padding">
+                  <ul style="list-style: none; padding-left: 0;">
+                    <li style="margin: 0 10px 0 0;
+                      display: inline-block;
+                      line-height: 35px"
+                        ng-class="{
+                        'vehicle-selected': (ctrl.selectedVehicle._id === vehicle._id),
+                        'vehicle-not-selected': !(ctrl.selectedVehicle._id === vehicle._id)
+                       }"
+                        class="row" ng-repeat="vehicle in ctrl.selectedCustomer.vehicles">
+                      <div style="padding-left: 3px;
+                         padding-right: 0px;"
+                           ng-click="choiseVehicle(vehicle)"
+                           class="col-md-12">
+                        <p class="no-marging"> {{vehicle.name}} - {{vehicle.model}}</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+
+              <!--Select vehicle to schedule-->
+              <div ng-show="ctrl.vehicleLockedError" class="row invalid-text" style="margin-top: -10px">
+                <p class="invalid-text">*Para trocar o veículo agendado desmarque a caixa abaixo.</p>
+              </div>
+              <div ng-class="{'border-error': ctrl.vehicleNotMarkedToScheduleError,
+                 'border-box': ctrl.selectedVehicle && !ctrl.vehicleNotMarkedToScheduleError}"
+                   ng-show="ctrl.selectedVehicle" class="row p-t-20 p-b-20 border-box">
+                <div class="col-sm-12 no-padding">
+                  <label style="margin-bottom: 0;">
+                    <input ng-model="ctrl.vehicleMarkedToSchedule" type="checkbox" ng-change="disableNotMarkedError()"
+                           style="margin-right: 5px;margin-left: 10px;">
+                    Agendar este carro para o serviço
+                  </label>
+                </div>
+              </div>
+
+              <!--Vehicle information-->
+              <div ng-show="ctrl.selectedVehicle" class="row p-t-20 p-b-20">
+                <div class="col-sm-12 no-padding">
+                  <div class="col-sm-12" style="text-align: center">
+                    <p>
+                      <span>
+                        <b class="dark-gray-text">{{ctrl.selectedVehicle.name}}</b>
+                      </span>
+                      <span class="light-gray-text" style="font-size: 11px;">
+                      {{ctrl.selectedVehicle.year}}/{{ctrl.selectedVehicle.model}}
+                    </span>
+                    </p>
+                  </div>
+                  <div class="col-sm-12" style="text-align: center">
+                    <p class="light-gray-text">
+                      {{ctrl.selectedVehicle.specification}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!--Vehicle image-->
+              <div ng-show="ctrl.selectedVehicle" class="row p-b-20">
+                <div class="col-sm-12 no-padding">
+                  <div class="col-sm-offset-2 col-sm-8" style="text-align: center">
+                    <img style="max-width: 100%; max-height: 100%;" ng-src="{{ctrl.vehicleImageUri}}">
+                  </div>
+                </div>
+              </div>
+
+              <!--Vehicle plate and purchase date-->
+              <div ng-show="ctrl.selectedVehicle"
+                   class="row p-t-20 p-b-20 border-box-radius">
+                <div class="col-sm-12 no-padding">
+                  <div class="col-sm-9"
+                       style="text-align: start; padding-top: 5px;">
+                    <p class="light-gray-text" ng-show="ctrl.selectedVehicle.purchaseDate" style="margin:0;">
+                      Data de compra: {{ctrl.selectedVehicle.purchaseDate | date:'dd/MM/yyyy'}}
+                    </p>
+                    <p class="light-gray-text" ng-hide="ctrl.selectedVehicle.purchaseDate" style="margin:0;">
+                      Data de compra: Não há registro
+                    </p>
+                  </div>
+                  <div class="col-sm-3 border-box-radius" style="
+                      text-align: center;
+                      margin-left: -10px;">
+                    <p class="light-gray-text" style="margin-top: 5px; margin-bottom: 5px;">
+                      {{ctrl.selectedVehicle.plate || 'XXX-XXXX'}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!--KM and Last Inspection-->
+              <div ng-show="ctrl.selectedVehicle" class="row p-b-20 p-t-20">
+                <div class="col-sm-6 no-padding">
+                  <div class="col-sm-12 no-padding">
+                    <div class="col-sm-4 no-padding">
+                      <label class="light-gray-text" style="
+                      font-weight: 400;
+                      font-size: 12px;"> Km atual
+                      </label>
+                    </div>
+                    <div ng-click="updateKmModal()" class="col-sm-6 no-padding">
+                      <a class="text-blue"
+                         style="font-size: 12px;">
+                        <span class="fa  fa-refresh text-blue" style="font-size: 10px;"></span>
+                        Atualizar KM
+                      </a>
+                    </div>
+                  </div>
+                  <div ng-show="ctrl.selectedVehicle.km" class="col-sm-12 no-padding dark-gray-text"
+                       style="margin-left: 3px; font-weight: 900; font-size: 16px;">
+                    <p>{{ctrl.selectedVehicle.km}} Km</p>
+                  </div>
+                  <div ng-hide="ctrl.selectedVehicle.km" class="col-sm-12 no-padding dark-gray-text"
+                       style="margin-left: 3px; font-weight: 900; font-size: 16px;">
+                    <p>Não há registro</p>
+                  </div>
+                  <div ng-show="ctrl.selectedVehicle.lastKmUpdate" class="col-sm-12 no-padding"
+                       style="margin-left: 3px">
+                    <label class="light-gray-text" style="
+                      margin-left: 0;
+                      font-weight: 400;
+                      font-size: 12px;"> Última atualização: {{ctrl.selectedVehicle.lastKmUpdate | date:'dd/MM/yyyy'}}
+                    </label>
+                  </div>
+                  <div ng-hide="ctrl.selectedVehicle.lastKmUpdate" class="col-sm-12 no-padding"
+                       style="margin-left: 3px">
+                    <label class="light-gray-text" style="
+                      margin-left: 0;
+                      font-weight: 400;
+                      font-size: 12px;"> Última atualização: Não há registro
+                    </label>
+                  </div>
+                </div>
+                <div class="col-sm-6 no-padding">
+
+                  <div class="col-sm-12 no-padding">
+                    <div class="col-sm-5 no-padding">
+                      <label class="light-gray-text" style="
+                    font-weight: 400;
+                    font-size: 12px;">Ultima revisão</label>
+                    </div>
+                    <div ng-click="updateInspectionModal()" class="col-sm-7 no-padding">
+                      <a class="text-blue"
+                         style="font-size: 12px;">
+                        <span class="fa  fa-refresh text-blue" style="font-size: 10px;"></span>
+                        Atualizar Revisão
+                      </a>
+                    </div>
+                  </div>
+
+                  <div ng-show="ctrl.selectedVehicle.inspection.km" class="col-sm-12 no-padding dark-gray-text"
+                       style="margin-left: 3px; font-weight: 900; font-size: 16px;">
+                    <p>{{ctrl.selectedVehicle.inspection.km}} Km</p>
+                  </div>
+                  <div ng-hide="ctrl.selectedVehicle.inspection.km" class="col-sm-12 no-padding dark-gray-text"
+                       style="margin-left: 3px; font-weight: 900; font-size: 16px;">
+                    <p>Não há registro</p>
+                  </div>
+
+                  <div ng-show="ctrl.selectedVehicle.inspection.date" class="col-sm-12 no-padding"
+                       style="margin-left: 3px">
+                    <label class="light-gray-text" style="
+                      margin-left: 0;
+                      font-weight: 400;
+                      font-size: 12px;"> Data da última revisão: {{ctrl.selectedVehicle.inspection.date |
+                      date:'dd/MM/yyyy'}}
+                    </label>
+                  </div>
+                  <div ng-hide="ctrl.selectedVehicle.inspection.date" class="col-sm-12 no-padding"
+                       style="margin-left: 3px">
+                    <label class="light-gray-text" style="
+                      margin-left: 0;
+                      font-weight: 400;
+                      font-size: 12px;"> Data da última revisão: Não há registro
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div ng-if="ctrl.btnAddVehicle">
+              <div class="row">
+                <create-vehicle customer-id="ctrl.selectedCustomer._id"></create-vehicle>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

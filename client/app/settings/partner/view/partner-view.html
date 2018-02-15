@@ -1,0 +1,92 @@
+<!--<div class="page page-table" data-ng-controller="CustomerCreateCtrl">-->
+<!--suppress ALL -->
+<div class="page page-table">
+  <div class="row ui-section">
+    <div class="col-md-6">
+      <h2 class="section-header">{{ctrl.partner.companyName}}</h2>
+    </div>
+    <div class="col-md-4 col-md-offset-2 text-right">
+      <button permission permission-only="permissions.updatePartner"
+              ui-sref="settings.partnerEdit({id: ctrl.partner._id})" class="btn-w-md md-button md-ink-ripple"
+              tooltip-placement="bottom"
+              uib-tooltip="Editar parceiro" tooltip-append-to-body="true">
+        <span class="ng-scope text-blue"><i class="zmdi zmdi-edit"></i> Editar parceiro</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row ui-section">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+
+          <!--START: User info-->
+          <div class="row">
+            <div class="col-md-12">
+              <div layout layout-sm="column" class="layout-sm-column layout-row ui-section font-md">
+                <div class="col-xs-12 col-sm-4 form-group">
+                  <p> <strong>Unidades:</strong></p>
+                  <span ng-repeat="branch in ctrl.partner.branches">{{branch.companyName}}</br></span>
+                </div>
+
+                <div class="col-xs-12 col-sm-4 form-group">
+                  <p><strong>Logo:</strong></p>
+                <div style="padding: 10px; border:1px solid #EAEAEA; max-width:350px;">
+                  <img src="{{ctrl.partner.logoUrl}}" class="img-responsive"/>
+                </div>
+                </div>
+
+              </div>
+
+              <div ng-show="ctrl.partner.address && ctrl.partner.state && ctrl.partner.city" class="row ui-section">
+                <div class="col-md-12">
+                  <div class="panel-heading form-name m-b-20">ENDEREÇO</div>
+                  <div layout layout-sm="column" class="layout-sm-column layout-row ui-section m-b-0 font-md">
+                    <div class="col-xs-12 col-sm-4 form-group">
+                      <p> <strong>Endereço:</strong></p>
+                      {{ctrl.partner.address ? ctrl.partner.address : 'Não definido'}}
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 form-group">
+                      <p> <strong>Estado:</strong></p>
+                      {{ctrl.partner.state ? ctrl.partner.state : 'Não definido'}}
+                    </div>
+
+
+                    <div class="col-xs-12 col-sm-4 form-group">
+                      <p> <strong>Cidade:</strong></p>
+                      {{ctrl.partner.city ? ctrl.partner.city : 'Não definido'}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="panel-heading form-name m-b-20">METATAGS DA LANDING PAGE</div>
+              <div layout layout-sm="column" class="layout-sm-column layout-row ui-section m-b-0 font-md">
+                <div class="col-xs-12 col-sm-4 form-group">
+                  <p> <strong>Título:</strong></p>
+                  {{ctrl.partner.metaTag.title ? ctrl.partner.metaTag.title : 'Não definido'}}
+                </div>
+
+                <div class="col-xs-12 col-sm-4 form-group">
+                  <p> <strong>Descrição:</strong></p>
+                  {{ctrl.partner.metaTag.description ? ctrl.partner.metaTag.description : 'Não definido'}}
+                </div>
+              </div>
+
+              <div class="panel-heading form-name m-b-20 m-t-40">Modulos do CRM</div>
+                <div class="form-group col-md-4">
+                  <span class="fa fa-check"></span> Solicitação de agendamento
+                </div>
+            </div>
+          </div>
+          <!--END: User info-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

@@ -1,0 +1,70 @@
+<div class="page page-table">
+  <ui-view>
+  </ui-view>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-7">
+      <h2 class="section-header m-b-20 m-t-20 ng-binding">Importe sua base de serviços</h2>
+    </div>
+  </div>
+
+  <div class="panel p-30">
+    <form class="row">
+      <div class="form-group col-md-6">
+        <label for="">Importar planilha de serviços:</label>
+        <div class="input-group">
+          <input type="file" ngf-select ngf-pattern="'.xls,.csv,.xlsx'"
+                 accept=".xls,.csv,.xlsx" ngf-max-files="1"  ng-model="file"
+                 ngf-multiple="false" class="form-control" required >
+          <span class="input-group-btn">
+              <button ng-click="upload()" class="md-raised btn-w-md btn-primary
+                      md-button md-ink-ripple" type="button">IMPORTAR</button>
+          </span>
+        </div>
+        <div class="p-t-10">
+          <a class="text-blue padding-5" href="{{ctrl.servicesCSVExample}}"><span class="fa fa-download"></span> Baixar modelo da planilha de serviços</a>
+        </div>
+        <div ng-messages="form_constraints.fullname.$error" multiple
+             ng-if='form_constraints.fullname.$dirty'>
+          <div ng-message="required" class="invalid-text">Campo requerido.</div>
+        </div>
+      </div>
+    </form>
+
+    <div class="panel-heading form-name m-t-30 m-b-20">SERVIÇOS IMPORTADOS</div>
+    <div ng-if="!ctrl.services.length" class="text-center">
+      <p><i>Não há serviços importados.</i></p>
+    </div>
+    <table class="table no-margin" ng-if="ctrl.services.length">
+      <thead>
+      <tr>
+        <th>Fabricante</th>
+        <th>Modelo</th>
+        <th>KM</th>
+        <th>Serviços</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="item in" ng-repeat="item in ctrl.services">
+        <td>
+          <p>{{item.brandNameVehicle}}</p>
+        </td>
+        <td>
+          <p>{{item.modelNameVehicle}}</p>
+        </td>
+        <td>
+          <p>{{item.mileage}}</p>
+        </td>
+        <td>
+          <div>
+            <span class="label label-default label-service" ng-repeat="service in item.revisions">
+              {{service}}
+            </span>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

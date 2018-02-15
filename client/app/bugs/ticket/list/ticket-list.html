@@ -1,0 +1,56 @@
+<!-- Created by monking1911 on 02/01/18. -->
+<div class="page page-table">
+	<h2 class="section-header m-20 m-b-40">TICKETS</h2>
+	<div class="panel panel-body">
+		<div class="col-sm-8 box-tabs">
+			<span class="space"></span>
+			<button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+			ng-class="{'btn-filter-active': ctrl.statusFilter == 'pending'}"
+			ng-click="filterByStatus('pending')"
+			tooltip-placement="bottom" uib-tooltip="Ver serviços agendados"
+			tooltip-append-to-body="true">
+			Pendentes
+			</button>
+			<span class="space"></span>
+			<button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+			ng-class="{'btn-filter-active': ctrl.statusFilter == 'finished'}"
+			ng-click="filterByStatus('finished')"
+			tooltip-placement="bottom" uib-tooltip="Ver agendamentos/serviços finalizados"
+			tooltip-append-to-body="true">
+			Finalizados 
+			</button>
+			<span class="space"></span>
+		</div>
+		<div class="col-sm-12" ng-if="ctrl.bugs.length > 0">
+			<div class="bug-atribute col-sm-2 text-center bold">Unidade</div>
+			<div class="bug-atribute col-sm-2 text-center bold">Página</div>
+			<div class="bug-atribute col-sm-2 text-center bold">Data de criação</div>
+			<div class="bug-atribute text-center col-sm-4 bold">Resumo</div>
+			<div class="bug-atribute text-center bold" ng-class="{'col-sm-2' : ctrl.statusFilter == 'finished'}" ng-if="ctrl.statusFilter == 'finished'">Data de finalização</div>
+			
+			<div class="bug-atribute text-center bold" ng-class="{'col-sm-2' : ctrl.statusFilter == 'pending'}" ng-if="ctrl.statusFilter == 'pending'">Finalizar Bug</div>
+		</div>
+		<div class="col-sm-12 text-center bold" ng-if="ctrl.bugs.length <= 0">
+			Não há bugs com esse status
+		</div>
+		<div class="col-sm-12" ng-if="ctrl.bugs.length > 0">
+			<div class="col-sm-12 no-padding" ng-repeat="bug in ctrl.bugs" ng-if="ctrl.bugs.length > 0" style="border-bottom: 1px solid #dadada;">
+				<div class="bug-atribute col-sm-2 text-center info-text m-t-43">{{bug.branch.companyName}}</div>
+				<div class="bug-atribute col-sm-2 text-center info-text m-t-43">{{bug.page}}</div>
+				<div class="bug-atribute col-sm-2 text-center info-text m-t-43">{{bug.createdAt | date:'dd/MM/yyyy'}}</div>
+				<div class="bug-atribute col-sm-4 text-center info-text">
+					<textarea readonly="true" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required full-width background-white info-text" cols="15" rows="5">{{bug.summary}}</textarea>
+				</div>
+				<div class="bug-atribute text-center info-text m-t-43" ng-class="{'col-sm-2' : ctrl.statusFilter == 'finished'}" ng-if="ctrl.statusFilter == 'finished'">{{bug.finishedAt | date:'dd/MM/yyyy'}}</div>
+				<div class="bug-atribute col-sm-2 text-center" ng-repeat-end ng-if="ctrl.statusFilter == 'pending'">
+					<button
+					class="md-raised btn-w-xs btn-success md-button md-ink-ripple m-t-33"
+					tooltip-placement="bottom" ng-click="alertForFinishBug(bug)" uib-tooltip="Finalizar BUG"
+					tooltip-append-to-body="true">
+					Finalizar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

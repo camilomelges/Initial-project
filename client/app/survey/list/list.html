@@ -1,0 +1,79 @@
+<!--<div class="page page-table" data-ng-controller="CustomerListCtrl">-->
+<div class="page">
+
+  <div class="row ui-section">
+    <div class="col-md-4">
+      <h2 class="section-header">Comentários</h2>
+    </div>
+  </div>
+
+  <div class="ui-section">
+    <div class="panel panel-default panel-labeled">
+      <div class="panel-body p-t-20">
+        <div class="col-md-12">
+          <div class="col-sm-12 box-tabs">
+            <span ng-repeat="question in ctrl.surveyQuestions track by question._id">
+              <button class="md-raised btn-w-sm md-button md-ink-ripple half-opacity btn-filter"
+                      ng-class="{'btn-filter-active': ctrl.questionFilter == question._id}"
+                      ng-click="filterByQuestion(question._id)"
+                      tooltip-placement="bottom" uib-tooltip="Ver {{question.crmLabel}}"
+                      tooltip-append-to-body="true">
+                {{question.crmLabel}}
+              </button>
+              <span class="space-lg" ng-if="!$last"></span>
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="col-md-12 survey-card p-0 m-b-30"
+               ng-repeat="survey in ctrl.surveys track by survey._id | orderBy:['-createdAt']"
+               id="{{survey._id}}"
+               ng-class="{'survey-card-active': survey._id == ctrl.surveySelected}">
+
+            <div class="col-md-2 text-center p-20 survey-card-border-left">
+              <img ng-if="survey.serviceNote == 100" src="images/assets/happy.svg" width="50px"/>
+              <img ng-if="survey.serviceNote == 0" src="images/assets/bad.svg" width="50px"/>
+              <p class="p-t-10" ng-if="survey.serviceNote == 100">Foi boa</p>
+              <p class="p-t-10" ng-if="survey.serviceNote == 0">Foi ruim</p>
+            </div>
+
+            <div class="col-md-10 survey-card-content">
+              <p class="survey-card-title">
+                <b ng-click="openCustomerDetailsModal(survey.customer._id)">{{survey.customer.name}}
+                  {{survey.customer.lastname}} <i class="fa fa-info-circle"></i></b>
+                <span class="survey-card-date">{{survey.createdAt | date:'dd/MM/yyyy HH:mm'}}</span>
+              </p>
+
+
+              <p class="p-t-5">{{survey.observation || "Não escreveu comentário."}}</p>
+            </div>
+          </div>
+
+          <div ng-hide="ctrl.surveys.length" class="text-center p-20">
+            <p><i>Não há resultados gerados nesta pesquisa.</i></p>
+          </div>
+        </div>
+
+        <div class="row" ng-show="ctrl.surveys.length">
+          <div class="col-md-12 text-center pagination-container">
+
+
+                      <span
+                        class="p-l-10 sub-title panel-normal-case">{{ctrl.surveys.length}} - {{ctrl.totalItems}} comentários</span>
+
+            <uib-pagination class="pagination-sm"
+                            ng-model="ctrl.currentPage"
+                            total-items="ctrl.totalItems"
+                            max-size="3"
+                            ng-change="paginate()"
+                            items-per-page="ctrl.limit"
+                            rotate="false"
+                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                            boundary-links="true"></uib-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

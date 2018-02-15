@@ -1,0 +1,162 @@
+<!--<div class="page page-table" data-ng-controller="CustomerCreateCtrl">-->
+<div class="page page-table partner-create">
+
+  <div class="col-md-8">
+    <h2 class="section-header m-b-20 m-t-20">Novo Parceiro</h2>
+  </div>
+
+  <!--<form name="form_constraints" data-ng-submit="submitForm(form_constraints.$valid)" novalidate>-->
+  <form name="form_constraints" data-ng-submit="submitForm(form_constraints.$valid)" novalidate>
+    <div class="col-md-4 m-t-20">
+      <button type="submit" ui-wave="" ng-disabled="ctrl.disableSaveButton" class="md-raised btn-w-md btn-primary md-button md-ink-ripple pull-right">
+        Salvar
+      </button>
+    </div>
+    <div class="col-xs-12">
+
+      <div class="panel p-30">
+        <!--START: Informaçoes pessoais-->
+        <div style="padding-left: 0;" class="panel-heading form-name m-b-20">IDENTIFICAÇÃO</div>
+
+        <div class="row ui-section">
+          <div class="form-group col-md-6">
+            <label>Nome</label>
+            <input type="text" class="form-control" name="companyName" required
+                   data-ng-model="form.companyName">
+            <div ng-messages="form_constraints.companyName.$error" multiple
+                 ng-if='form_constraints.$submitted && form_constraints.companyName.$error'>
+              <div ng-message="required" class="invalid-text">Campo requerido.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="m-b-30 col-md-12">
+            <div style="padding-left: 0px;" class="panel-heading form-name m-b-30">Personalização</div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label>Logo Url</label>
+                <input type="text" class="form-control" name="logoUrl" data-ng-model="form.logoUrl">
+                <div ng-messages="form_constraints.fullname.$error" multiple
+                     ng-if='form_constraints.$submitted && form_constraints.fullname.$error'>
+                  <div ng-message="required" class="invalid-text">Campo requerido.</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 30px" class="row">
+              <div class="col-md-6">
+                <label>Marcas que o parceiro representa</label>
+                <select class="full-width" chosen multiple name="multiBranches"
+                        data-placeholder="Selecione"
+                        allow-single-deselect="true"
+                        data-placeholder-text-multiple="'Clique para escolher'"
+                        no-results-text="'não foi encontrado'"
+                        ng-model="form.brands"
+                        data-ng-options="item.name for item in ctrl.brands">
+                  <option value=""></option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label>Agendamento no final de semana</label>
+                <br/>
+                <p>Sábado:
+                  <input type="checkbox" ng-model="form.operationWeekend.saturday">
+                </p>
+
+                <p>Domingo:
+                  <input type="checkbox" ng-model="form.operationWeekend.sunday">
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding-left: 0;" class="panel-heading form-name m-b-20 m-t-20">METATAGS DA LANDING PAGE</div>
+
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label>Título</label>
+            <input type="text" class="form-control" name="title" data-ng-model="form.metaTag.title">
+            <div ng-messages="form_constraints.fullname.$error" multiple
+                 ng-if='form_constraints.$submitted && form_constraints.fullname.$error'>
+              <div ng-message="required" class="invalid-text">Campo requerido.</div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label>Descrição</label>
+            <input type="text" class="form-control" name="description"
+                   data-ng-model="form.metaTag.description">
+            <div ng-messages="form_constraints.fullname.$error" multiple
+                 ng-if='form_constraints.$submitted && form_constraints.fullname.$error'>
+              <div ng-message="required" class="invalid-text">Campo requerido.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding-left: 0;" class="panel-heading form-name m-b-20 m-t-20">UNIDADES</div>
+        <div class="row ui-section">
+
+          <div class="col-md-12">
+            <div class="box-result">
+              <ul>
+                <li ng-hide="form.branches.length > 0">
+                  <p>
+                    <small><i>Nenhum unidade adicionada.</i></small>
+                  </p>
+                </li>
+                <li class="row" ng-repeat="branch in form.branches"
+                    ng-show="form.branches.length > 0">
+                  <div class="col-md-10">
+                    <p> {{branch.companyName}} - CNPJ: {{branch.cnpj}} Local: {{branch.address}} - {{branch.city.name}}
+                      /
+                      {{branch.state.name}}}</p>
+                    <p>Contato: {{branch.contact.phone}} - {{branch.contact.email}}</p>
+                    <p> Expediente: {{branch.scheduleSettings.startTime}} às {{branch.scheduleSettings.endTime}}
+                      Intervalo entre agendamentos: {{branch.scheduleSettings.interval}} Capacidade produtiva:
+                      {{branch.scheduleSettings.maxCarsPerSchedule}}</p>
+                    <p> Serviços Fornecidos: {{branch.servicesString}}</p>
+                  </div>
+                  <div class="col-md-2">
+                    <a ng-click="removeBranch($index)" style="color: #5c6066; margin-left: 30px; font-size: 20px"
+                       class="hover-color-remove">
+                      <span class="fa fa-trash"></span>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-xs-12 m-b-20 m-t-20 no-padding">
+              <button style="text-align: left; min-width: 0px;" type="button" ng-click="toggleBranchForm()" ui-wave=""
+                      class="btn-w-md md-button md-ink-ripple">
+                <span class="text-blue">+ {{ctrl.branchFormButton}}</span>
+              </button>
+              <branch-form-directive ng-if="ctrl.showBranchForm"></branch-form-directive>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 m-b-20 m-t-20">
+
+        <button type="button" ng-click="cancelForm()" class="btn-w-md md-button md-ink-ripple half-opacity pull-left"
+                tooltip-placement="bottom" tooltip-append-to-body="true">
+          <span class="ng-scope text-blue">Cancelar</span>
+        </button>
+
+        <button type="submit" ui-wave="" ng-disabled="ctrl.disableSaveButton" class="md-raised btn-w-md btn-primary md-button md-ink-ripple pull-right">
+          Salvar
+        </button>
+      </div>
+
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -1,0 +1,105 @@
+<div class="page page-table">
+  <div class="row ui-section">
+    <div class="col-md-2">
+      <h2 class="section-header">Clientes</h2>
+    </div>
+
+    <div class="col-md-6 text-right">
+      <button permission permission-only="permissions.createCustomer"
+              ng-click="newCustomer()"
+              ng-disabled="ctrl.disableCreateCustomer"
+              class="btn-w-md md-button md-ink-ripple"
+              tooltip-placement="bottom"
+              uib-tooltip="Cadastrar novo cliente" tooltip-append-to-body="true"
+              analytics-on="click"
+              analytics-event="NovoCliente">
+        <span class="ng-scope text-blue"><i class="zmdi zmdi-plus"></i> Novo Cliente</span>
+      </button>
+    </div>
+
+    <div class="col-md-4 box-search">
+      <search-box placeholder="Busque por nome, email, telefone ou CPF" source-type="customer"></search-box>
+    </div>
+
+  </div>
+
+
+  <ui-view>
+  </ui-view>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <table class="table no-margin" ng-show="ctrl.customerList.length">
+        <thead>
+          <tr>
+            <th ng-click="orderByName()">Nome
+              <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByName == false, 'fa fa-caret-down': ctrl.orderByName == true}"></i>
+            </th>
+            <th ng-click="orderByDoc()">CPF/CNPJ
+              <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByDoc == false, 'fa fa-caret-down': ctrl.orderByDoc == true}"></i>
+            </th>
+            <th ng-click="orderByTel()" class="hidden-xs">Telefone
+              <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByTel == false, 'fa fa-caret-down': ctrl.orderByTel == true}"></i>
+            </th>
+            <th ng-click="orderByEmail()" class="hidden-xs">Email
+              <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByEmail == false, 'fa fa-caret-down': ctrl.orderByEmail == true}"></i>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in ctrl.customerList">
+            <td>{{item.fullname}}</td>
+            <td>{{item.doc}}</td>
+            <td class="hidden-xs">{{item.phone || 'Não há registro'}}</td>
+            <td class="hidden-xs">{{item.email || 'Não há registro'}}</td>
+
+            <td class="text-right">
+              <button ng-click="viewCustomer({id: item._id})"
+                      ng-disabled="ctrl.disableViewCustomer"
+                      class="md-raised btn-w-xs md-button md-ink-ripple half-opacity "
+                      tooltip-placement="bottom" uib-tooltip="Ver dados deste cliente e seu veículo"
+                      tooltip-append-to-body="true">
+                <span class="zmdi zmdi-account-box"></span>
+              </button>
+
+              <button ng-click="schedule({id: item._id})" ng-disabled="ctrl.disableCreateSchedule" permission permission-only="permissions.createSchedule"
+                      class="md-raised btn-w-xs btn-success md-button md-ink-ripple m-l-5"
+                      tooltip-placement="bottom" uib-tooltip="Novo agendamento para este cliente"
+                      tooltip-append-to-body="true">
+                  <span class="ng-scope">
+                    &nbsp;&nbsp;AGENDAR&nbsp;&nbsp;
+                  </span>
+              </button>
+
+              <new-chat ng-if="item.mobileActive" reload="true" value="item"></new-chat>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div ng-show="!ctrl.customerList.length && !ctrl.searchReturnedEmpty" class="text-center">
+        <p><i>Não há clientes cadastrados</i></p>
+      </div>
+      <div ng-show="!ctrl.customerList.length && ctrl.searchReturnedEmpty" class="text-center">
+        <p><i>Não foi encontrado nenhum cliente para essa busca</i></p>
+      </div>
+      <div class="row" ng-show="ctrl.customerList.length">
+        <div class="col-md-12 pagination-container">
+
+          <span
+            class="p-l-10 sub-title panel-normal-case">{{ctrl.customerList.length}} - {{ctrl.totalItems}} clientes</span>
+
+          <uib-pagination class="pagination-sm"
+                          ng-model="ctrl.currentPage"
+                          total-items="ctrl.totalItems"
+                          max-size="3"
+                          ng-change="paginate()"
+                          items-per-page="ctrl.limit"
+                          rotate="false"
+                          previous-text="&lsaquo;" next-text="&rsaquo;"
+                          boundary-links="true"></uib-pagination>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

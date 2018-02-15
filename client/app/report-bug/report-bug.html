@@ -1,0 +1,47 @@
+<!-- Created by monking1911 on 02/01/18. -->
+<div class="row modal-body">
+  <h2 class="section-header m-20">REPORTAR PROBLEMA</h2>
+  <form name="form_constraints" novalidate>
+    <div class="form-group col-sm-12 m-b-10 m-t-15">
+      <label>Ocorrído:</label><small class="gray-text"> Uma breve explicação do bug.</small>
+      <textarea name="summary" data-ng-model="ctrl.bug.summary" required class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required full-width" rows="10" placeholder="Ex.: Quando fui salvar um novo agendamento, o botão não funcionou."></textarea>
+      <p ng-show="!ctrl.bug.summary" class="invalid-text m-t-5">
+        Campo requerido
+      </p>
+    </div>
+    <div class="form-group col-sm-4">
+      <label>Página:</label>
+      <input type="text" maxlength="22" placeholder="ex.: Novo cliente, Editar cliente" name="page" data-ng-model="ctrl.bug.page" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required">
+    </div>
+    <div class="form-group col-sm-4">
+      <label>Data:</label>
+      <div class="ui-datepicker">
+        <input type="text"
+        name="date"
+        class="form-control"
+        uib-datepicker-popup="{{calendar.format}}"
+        ng-model="calendar.selectedDate"
+        init-date="calendar.dateOptions.initDate"
+        is-open="calendar.calendarOpen"
+        datepicker-options="calendar.dateOptions"
+        clear-text='Limpar'
+        close-text='Fechar'
+        ng-change="checkError('date')"
+        current-text='Hoje'
+        show-button-bar="false"
+        popup-placement="auto bottom-left"
+        ng-keyup="calendar.calendarOpen = true"
+        alt-input-formats="calendar.altInputFormats"
+        ng-click="calendar.calendarOpen = true"/>
+      </div>
+    </div>
+    <div class="form-group col-sm-4">
+      <label>Horário:</label>
+      <input type="hour" name="hour" placeholder="19:11" data-ng-model="ctrl.bug.hour" ui-time-mask class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required">
+    </div>
+    <div class="col-sm-12 m-t-10">
+      <button type="button" ng-click="cancel()" class="btn-w-md md-button md-ink-ripple half-opacity pull-left">Cancelar</button>
+      <button type="submit" ng-click="submit(form_constraints)" class="md-raised btn-w-md btn-primary md-button md-ink-ripple pull-right">Salvar</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,125 @@
+<div class="row modal-body">
+  <h4 class="m-20">Não consegui agendar...</h4>
+  <hr>
+  <form name="form_constraints" novalidate>
+    <div class="ui-section">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label>Informe o motivo:</label>
+          <select chosen data-placeholder="Selecione" style="width:100%" class="tag-select" ng-model="reason"
+                  disable-search="true"
+                  ng-change="reasonChange(reason)"
+                  data-placeholder-text-single="'Selecione'"
+                  no-results-text="'não foi encontrado'"
+                  data-ng-options="item.name for item in ScheduleReasons track by item.status">
+            <option value=""></option>
+          </select>
+        </div>
+        <div ng-show="showDangerUpdate" class="alert alert-warning alert-dismissible" role="alert">
+          <strong>Atenção!</strong> Essa ação irá <b><u>encerrar</u></b> esta solicitação de agendamento.
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="showSelectDate">
+      <div class="col-xs-12">
+        <h5>Informe o dia e horário para novo contato:</h5>
+        <br>
+        <div class="form-group">
+          <label>Data</label>
+          <small><i>(obrigatório)</i></small>
+          <div class="ui-datepicker">
+            <input type="text"
+                   class="form-control"
+                   uib-datepicker-popup="{{calendar.format}}"
+                   ng-model="form.callAgainAt.date"
+                   is-open="calendar.calendarOpen"
+                   min-date="calendar.minDate"
+                   max-date="calendar.maxDate"
+                   datepicker-options="calendar.dateOptions"
+                   date-disabled="calendar.disabled(date, mode)"
+                   ng-required="true"
+                   clear-text='Limpar'
+                   close-text='Fechar'
+                   current-text='Hoje'
+                   show-button-bar="false"
+                   popup-placement="auto top-left"
+                   alt-input-formats="calendar.altInputFormats"
+                   ng-click="calendar.calendarOpen = true"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Horário</label>
+          <small><i>(obrigatório)</i></small>
+          <input type="text" class="form-control" ng-model="form.callAgainAt.time" ng-required="true" ng-click="openSelectHour()">
+        </div>
+        <br>
+        <br>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <strong>Atenção!</strong> Essa ação irá <b><u>remarcar</u></b> esta solicitação de agendamento.
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="showFormReason">
+      <div class="col-xs-12">
+        <label>Por que?</label>
+        <textarea rows="8" class="form-control m-b-10" ng-model="form.description"></textarea>
+        <br>
+        <br>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <strong>Atenção!</strong> Essa ação irá <b><u>encerrar</u></b> esta solicitação de agendamento.
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="showDateAndWith">
+      <div class="col-xs-12">
+        <h5>Informe o dia e com quem foi agendado:</h5>
+        <br>
+        <div class="form-group">
+          <label>Data</label>
+          <small><i>(obrigatório)</i></small>
+          <div class="ui-datepicker">
+            <input type="text"
+                   class="form-control"
+                   uib-datepicker-popup="{{calendar.format}}"
+                   ng-model="form.executed.date"
+                   is-open="calendar.calendarOpen"
+                   min-date="calendar.minDate"
+                   max-date="calendar.maxDate"
+                   datepicker-options="calendar.dateOptions"
+                   date-disabled="calendar.disabled(date, mode)"
+                   ng-required="true"
+                   clear-text='Limpar'
+                   close-text='Fechar'
+                   current-text='Hoje'
+                   show-button-bar="false"
+                   popup-placement="auto top-left"
+                   alt-input-formats="calendar.altInputFormats"
+                   ng-click="calendar.calendarOpen = true"/>
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <label>Com quem?</label>
+          <small><i>(obrigatório)</i></small>
+          <input type="text" class="form-control m-b-10" ng-model="form.executed.with">
+        </div>
+        <br>
+        <br>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <strong>Atenção!</strong> Essa ação irá <b><u>encerrar</u></b> esta solicitação de agendamento.
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" ng-click="cancel($event)" class="btn-w-md md-button md-ink-ripple half-opacity pull-left">Cancelar
+  </button>
+  <button type="button" ng-click="save($event)" class="md-raised btn-w-md btn-primary md-button md-ink-ripple pull-right">
+    Salvar
+  </button>
+</div>

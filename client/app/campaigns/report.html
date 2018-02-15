@@ -1,0 +1,88 @@
+<div class="page page-table">
+  <div class="row ui-section">
+    <div class="col-md-12">
+      <h2 class="section-header">Relatórios das campanhas</h2>
+    </div>
+  </div>
+
+
+  <ui-view>
+  </ui-view>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="table-responsive">
+        <div ng-if="!ctrl.campaignsList.length" class="text-center">
+          <p><i>Não há campanhas. Clique no menu ao lado em "Criar campanha" para iniciar uma nova campanha</i></p>
+        </div>
+        <table class="table no-margin statistics-campaign-table table-striped" ng-if="ctrl.campaignsList.length">
+          <thead>
+          <tr>
+            <th ng-click="orderById()">ID 
+              <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderById == false, 'fa fa-caret-down': ctrl.orderById == true}"></i>
+            </th>
+            <th ng-click="orderByName()">Nome da campanha 
+              <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByName == false, 'fa fa-caret-down': ctrl.orderByName == true}"></i>
+            </th>
+            <th ng-click="orderByCreateAt()">Data do disparo 
+              <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByCreateAt == false, 'fa fa-caret-down': ctrl.orderByCreateAt == true}"></i>
+            </th>
+            <th ng-click="orderByStatistics()" class="text-center">Estatisticas de envios 
+              <i aria-hidden="true" ng-class="{'fa fa-caret-up': ctrl.orderByStatistics == false, 'fa fa-caret-down': ctrl.orderByStatistics == true}"></i>
+            </th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="item in" ng-repeat="item in ctrl.campaignsList">
+            <td class="id-campaign">{{item.shortid}}</td>
+            <td>
+              <p class="name-campaign" ng-class="{'null': !item.name}">{{item.name || 'Não identificada'}}</p>
+            </td>
+            <td>{{item.dateCreate}}</td>
+            <td class="statistics-campaign">
+              <div class="col-xs-12 col-sm-3 no-padding">
+                <p><strong>{{item.statistics.sentEmail}}</strong>
+                  <small>emails</small>
+                </p>
+              </div>
+              <div class="col-xs-12 col-sm-2 no-padding">
+                <p><strong>{{item.statistics.sentSMS}}</strong>
+                  <small>sms</small>
+                </p>
+              </div>
+              <div class="col-xs-12 col-sm-3 no-padding">
+                <p><strong>{{item.statistics.sentNotification}}</strong>
+                  <small>notificações</small>
+                </p>
+              </div>
+              <!--<div class="col-xs-12 col-sm-3 no-padding">-->
+              <!--<p><strong>{{item.statisticsEmail.bounce}}</strong>-->
+              <!--<small>negados</small>-->
+              <!--</p>-->
+              <!--</div>-->
+              <div class="col-xs-12 col-sm-2 no-padding">
+                <p><strong>{{item.statistics.open}}</strong>
+                  <small>visitas</small>
+                </p>
+              </div>
+              <div class="col-xs-12 col-sm-2 no-padding">
+                <p><strong>{{item.statistics.converted}}</strong>
+                  <small>agendados</small>
+                </p>
+              </div>
+            </td>
+            <td class="text-right">
+              <!--<button ng-click="campaignDetails(item._id)" class="btn-w-md md-button md-ink-ripple"-->
+              <!--tooltip-placement="bottom" uib-tooltip="Ver detalhes do relatório" tooltip-append-to-body="true">-->
+              <!--<a class="text-blue">relatório</a>-->
+              <!--</button>-->
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

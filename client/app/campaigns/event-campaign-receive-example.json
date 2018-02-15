@@ -1,0 +1,86 @@
+[
+  {
+    "ip": "167.89.55.67",
+    "response": "error dialing remote address: dial tcp 47.88.29.253:25: connection refused",
+    "sg_event_id": "2g9en-y2RNuZH5-gVGJS3g",
+    "sg_message_id": "7iN-TcLdRQy0Zj5czUCybQ.filter0825p1mdw1-2785-5883E305-2D.1",
+    "tls": 0,
+    "event": "deferred",
+    "email": "invalid_email@12321.cc",
+    "attempt": "3",
+    "timestamp": 1485038540,
+    "smtp-id": "<7iN-TcLdRQy0Zj5czUCybQ@ismtpd0004p1iad1.sendgrid.net>",
+    "category": [
+      "58841b60212f1131b61cb070"
+    ]
+  },
+  {
+    "ip": "167.89.55.67",
+    "status": "4.0.0",
+    "sg_event_id": "dG88Vr5cTBWNHtKcQ0CTLA",
+    "reason": "error dialing remote address: dial tcp 47.88.29.253:25: connection refused",
+    "sg_message_id": "7iN-TcLdRQy0Zj5czUCybQ.filter0825p1mdw1-2785-5883E305-2D.1",
+    "tls": 0,
+    "event": "bounce",
+    "email": "invalid_email@12321.cc",
+    "timestamp": 1485038664,
+    "smtp-id": "<7iN-TcLdRQy0Zj5czUCybQ@ismtpd0004p1iad1.sendgrid.net>",
+    "type": "blocked",
+    "category": [
+      "58841b60212f1131b61cb070"
+    ]
+  },
+  {
+    "email": "marcelo.oreen@gmail.com",
+    "smtp-id": "<gLa0VQqiS16j1p6y2iFxhg@ismtpd0005p1iad1.sendgrid.net>",
+    "timestamp": 1485051238,
+    "sg_event_id": "lZ3oO1vTRkahB0Ji3m4cbQ",
+    "sg_message_id": "gLa0VQqiS16j1p6y2iFxhg.filter0984p1mdw1-19784-58841566-4D.0",
+    "category": [
+      "58841b60212f1131b61cb070"
+    ],
+    "event": "processed"
+  },
+  {
+    "ip": "167.89.55.67",
+    "response": "250 2.0.0 OK 1485051240 d76si5540835itd.74 - gsmtp ",
+    "sg_event_id": "xUe37W0MQZuA33yn73jQ4Q",
+    "sg_message_id": "gLa0VQqiS16j1p6y2iFxhg.filter0984p1mdw1-19784-58841566-4D.0",
+    "tls": 1,
+    "event": "delivered",
+    "email": "marcelo.oreen@gmail.com",
+    "timestamp": 1485051240,
+    "smtp-id": "<gLa0VQqiS16j1p6y2iFxhg@ismtpd0005p1iad1.sendgrid.net>",
+    "category": [
+      "58841b60212f1131b61cb070"
+    ]
+  },
+  {
+    "ip": "167.89.55.67",
+    "response": "250 2.0.0 OK 1485051240 d76si5540835itd.74 - gsmtp ",
+    "sg_event_id": "xUe37W0MQZuA33yn73jQ4Q",
+    "sg_message_id": "gLa0VQqiS16j1p6y2iFxhg.filter0984p1mdw1-19784-58841566-4D.0",
+    "tls": 1,
+    "event": "open",
+    "email": "marcelo.oreen@gmail.com",
+    "timestamp": 1485051240,
+    "smtp-id": "<gLa0VQqiS16j1p6y2iFxhg@ismtpd0005p1iad1.sendgrid.net>",
+    "category": [
+      "58841b60212f1131b61cb070"
+    ]
+  },
+  {
+    "ip": "167.89.55.67",
+    "response": "250 2.0.0 OK 1485051240 d76si5540835itd.74 - gsmtp ",
+    "sg_event_id": "xUe37W0MQZuA33yn73jQ4Q",
+    "sg_message_id": "gLa0VQqiS16j1p6y2iFxhg.filter0984p1mdw1-19784-58841566-4D.0",
+    "tls": 1,
+    "event": "click",
+    "email": "marcelo.oreen@gmail.com",
+    "timestamp": 1485051240,
+    "smtp-id": "<gLa0VQqiS16j1p6y2iFxhg@ismtpd0005p1iad1.sendgrid.net>",
+    "category": [
+      "58841b60212f1131b61cb070"
+    ]
+  }
+]

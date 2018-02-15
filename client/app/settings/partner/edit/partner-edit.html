@@ -1,0 +1,136 @@
+<!--<div class="page page-table" data-ng-controller="CustomerCreateCtrl">-->
+<div class="page page-table partner-create">
+
+  <div class="col-md-8">
+    <h2 class="section-header m-b-20 m-t-20">Editar Parceiro</h2>
+  </div>
+
+  <!--<form name="form_constraints" data-ng-submit="submitForm(form_constraints.$valid)" novalidate>-->
+  <form name="form_constraints" data-ng-submit="submitForm(form_constraints.$valid)" novalidate>
+    <div class="col-md-4 m-t-20">
+      <button type="submit" ui-wave="" ng-disabled="ctrl.disableSaveButton" class="md-raised btn-w-md btn-primary md-button md-ink-ripple pull-right">
+        Salvar
+      </button>
+    </div>
+    <div class="col-xs-12">
+      <div class="panel p-30">
+
+        <div class="row">
+          <div class="col-md-3 col-md-offset-9">
+            <label>Situação</label>
+            <select chosen disable-search="true" ng-model="ctrl.active" id="situation"
+                    ng-change="activeOptionChange()"
+                    ng-options="active.name for active in activeOptions">
+            </select>
+          </div>
+        </div>
+        <!--START: Informaçoes pessoais-->
+        <div style="padding-left: 0;" class="panel-heading form-name m-b-20">IDENTIFICAÇÃO</div>
+
+        <div class="row ui-section">
+          <div class="form-group col-md-6">
+            <label>Nome</label>
+            <input type="text" class="form-control" name="companyName" required
+                   data-ng-model="form.companyName">
+            <div ng-messages="form_constraints.companyName.$error" multiple
+                 ng-if='form_constraints.$submitted && form_constraints.companyName.$error'>
+              <div ng-message="required" class="invalid-text">Campo requerido.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="m-b-30 col-md-12">
+            <div style="padding-left: 0px;" class="panel-heading form-name m-b-30">Personalização</div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label>Logo Url</label>
+                <input type="text" class="form-control" name="logoUrl" data-ng-model="form.logoUrl">
+                <div ng-messages="form_constraints.fullname.$error" multiple
+                     ng-if='form_constraints.$submitted && form_constraints.fullname.$error'>
+                  <div ng-message="required" class="invalid-text">Campo requerido.</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 30px" class="row">
+              <!--<div class="col-md-4">-->
+                <!--<label>Plano de revisão da montadora</label>-->
+                <!--<select chosen data-placeholder="Selecione" class="full-width"-->
+                        <!--data-placeholder-text-single="'Clique para escolher'"-->
+                        <!--no-results-text="'Não foi encontrado'"-->
+                        <!--ng-model="ctrl.inspectionPlanSelected"-->
+                        <!--data-ng-options="inspectionPlan.name for inspectionPlan in ctrl.inspectionPlans">-->
+                  <!--<option value=""></option>-->
+                <!--</select>-->
+              <!--</div>-->
+              <div class="col-md-6">
+                <label>Marcas que o parceiro representa</label>
+                <select class="full-width" chosen multiple name="multiBranches"
+                        data-placeholder="Selecione"
+                        allow-single-deselect="true"
+                        data-placeholder-text-multiple="'Clique para escolher'"
+                        no-results-text="'não foi encontrado'"
+                        ng-model="form.brands"
+                        data-ng-options="item.name for item in ctrl.brands">
+                  <option value=""></option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label>Agendamento no final de semana</label>
+                <br/>
+                <p>Sábado:
+                  <input type="checkbox" ng-model="form.operationWeekend.saturday">
+                </p>
+
+                <p>Domingo:
+                  <input type="checkbox" ng-model="form.operationWeekend.sunday">
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding-left: 0;" class="panel-heading form-name m-b-20 m-t-20">METATAGS DA LANDING PAGE</div>
+
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label>Título</label>
+            <input type="text" class="form-control" name="title" data-ng-model="form.metaTag.title">
+            <div ng-messages="form_constraints.fullname.$error" multiple
+                 ng-if='form_constraints.$submitted && form_constraints.fullname.$error'>
+              <div ng-message="required" class="invalid-text">Campo requerido.</div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label>Descrição</label>
+            <input type="text" class="form-control" name="description"
+                   data-ng-model="form.metaTag.description">
+            <div ng-messages="form_constraints.fullname.$error" multiple
+                 ng-if='form_constraints.$submitted && form_constraints.fullname.$error'>
+              <div ng-message="required" class="invalid-text">Campo requerido.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 m-b-20 m-t-20">
+
+        <button type="button" ng-click="cancelForm()" class="btn-w-md md-button md-ink-ripple half-opacity pull-left"
+                tooltip-placement="bottom" tooltip-append-to-body="true">
+          <span class="ng-scope text-blue">Cancelar</span>
+        </button>
+
+        <button type="submit" ui-wave="" ng-disabled="ctrl.disableSaveButton" class="md-raised btn-w-md btn-primary md-button md-ink-ripple pull-right">
+          Salvar
+        </button>
+      </div>
+
+      </button>
+    </div>
+
+  </form>
+</div>
