@@ -43,22 +43,12 @@ module.exports = function() {
             '!' + clientApp + "/**/*.spec.js"
         ],
         docs: docs,
-        docsJade: [
-            docs + "/jade/index.jade",
-            docs + "/jade/faqs.jade",
-            docs + "/jade/layout.jade"
-        ],
         allToClean: [
             tmp,
             ".DS_Store",
             ".sass-cache",
             "node_modules",
             ".git",
-            client + "/bower_components",
-            docs + "/jade",
-            docs + "/layout.html",
-            landing + "/jade",
-            landing + "/bower_components",
             "readme.md"
         ]
     };
